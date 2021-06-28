@@ -4,7 +4,7 @@ OBJ_DIR	:= obj/
 
 OBJ_DIRS = $(OBJ_DIR)
 
-PRE_SRCS =	main
+PRE_SRCS =	main init base
 
 SRCS = $(addsuffix .cpp, $(addprefix $(SRC_DIR), $(PRE_SRCS)))
 OBJS = $(addsuffix .o, $(addprefix $(OBJ_DIR), $(PRE_SRCS)))
@@ -23,6 +23,11 @@ all:	$(NAME)
 $(NAME): $(OBJ_DIRS) $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) 
 	echo "----- \033[32m $@ created\033[0m  -----"
+	echo "----- \033[33m | -- --- TO USE --- -- |\033[0m  -----"
+	echo "----- \033[33m | ./ircPower \033[34m 6667\033[33m     |\033[0m  -----"
+	echo "----- \033[33m | nc 127.0.0.1 \033[34m 6667\033[33m   | \033[0m  -----"
+	echo "----- \033[33m | -- --- --- --- --- --|\033[0m  -----"
+
 
 $(OBJ_DIRS):
 	mkdir -p $(OBJ_DIRS)

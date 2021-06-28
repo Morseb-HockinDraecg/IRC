@@ -8,5 +8,26 @@
 #include <sys/types.h>	//sockets
 #include <sys/socket.h>	//sockets
 
+class Base{
+
+	struct sockaddr_in	addr;
+	int					sockFd;
+
+public:
+	Base();
+	~Base();
+	Base (Base const &);
+	Base & operator=(Base const &);
+
+	void	setAddr(struct sockaddr_in v);
+	void	setSockFd(int v);
+
+	struct sockaddr_in	getAddr();
+	int					getSockFd();
+};
+
+
+
+
 
 #endif
