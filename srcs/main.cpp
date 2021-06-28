@@ -19,7 +19,7 @@ if (ac != 2){
 
 	// ---  init socket  ---
 	int sockfd;
-	sockfd = socket(PF_INET, SOCK_STREAM, 0);
+	sockfd = socket(PF_INET, SOCK_STREAM, 0);	//PF_INET => IPv4  || PF_INET6 => IPv6
 	if (sockfd == -1){
 		std::cout << "Socket creation failed\n";
 		return (-1);
@@ -36,12 +36,17 @@ if (ac != 2){
 	} else
 	std::cout << "Bind succeed !\n";
 
-	// wait for connection
+	// ---  waiting for a connection to the socket ---
 	int	listensock;
 	listensock = listen(sockfd, 0);
 	if (listensock == -1){
 		std::cout << "listen failed\n";
 	} else
 		std::cout << "listen succeed !\n";
+	
+	
+	// ---  loop  ---
+	while (1){
 
+	}
 }
