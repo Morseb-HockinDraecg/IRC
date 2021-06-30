@@ -2,7 +2,7 @@
 
 void connectingClient(Base const &b){	// ---	accept a connexion --
 	int sockfd = b.getSockFd();
-	
+
     struct sockaddr_in addrClient;
     // sockaddr_in addrClient;
 	int acc;
@@ -14,6 +14,6 @@ void connectingClient(Base const &b){	// ---	accept a connexion --
 		throw MyException();
 	} else {
 		std::cout << "\e[36mnew client !\n\e[0m";
-		
+
 	}
 }
