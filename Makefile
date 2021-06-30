@@ -4,7 +4,7 @@ OBJ_DIR	:= obj/
 
 OBJ_DIRS = $(OBJ_DIR)
 
-PRE_SRCS =	main init base
+PRE_SRCS =	main init connexion class/Base
 
 SRCS = $(addsuffix .cpp, $(addprefix $(SRC_DIR), $(PRE_SRCS)))
 OBJS = $(addsuffix .o, $(addprefix $(OBJ_DIR), $(PRE_SRCS)))
@@ -31,6 +31,8 @@ $(NAME): $(OBJ_DIRS) $(OBJS)
 
 $(OBJ_DIRS):
 	mkdir -p $(OBJ_DIRS)
+	mkdir -p $(OBJ_DIRS)class
+	mkdir -p $(OBJ_DIRS)com
 
 $(OBJS) : $(INC_DIR)
 

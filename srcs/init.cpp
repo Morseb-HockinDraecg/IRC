@@ -5,7 +5,11 @@ static void	initSocket(Base &b);				// ---  init socket  ---
 static void	initBind(Base &b);					// ---  bind the socket to a name  ---
 static void	initListen(Base &b);				// ---  waiting for a connection to the socket ---
 
-void init(char **av, Base &b){
+bool init(int ac, char **av, Base &b){
+	if (ac != 2){
+		std::cout << "need a number as arg\n";
+		return false;
+	}
 	try {
 		init_struct(av, b);
 		initSocket(b);
@@ -13,7 +17,9 @@ void init(char **av, Base &b){
 		initListen(b);
 	} catch (const MyException &e){
 		std::cout << e.what() << std::endl;
+		return false;
 	}
+	return true;
 }
 
 //

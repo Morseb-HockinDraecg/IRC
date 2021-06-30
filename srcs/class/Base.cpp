@@ -14,9 +14,9 @@ void	Base::setSockFd(int v){
 
 // --- --- --- Getters --- --- ---
 
-struct sockaddr_in Base::getAddr(){
+struct sockaddr_in Base::getAddr() const{
 	return addr;
 }
-int Base::getSockFd(){
+int Base::getSockFd() const{
 	return sockFd;
 }

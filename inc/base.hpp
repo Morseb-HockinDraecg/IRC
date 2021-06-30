@@ -22,12 +22,8 @@ public:
 	void	setAddr(struct sockaddr_in v);
 	void	setSockFd(int v);
 
-	struct sockaddr_in	getAddr();
-	int					getSockFd();
+	struct sockaddr_in	getAddr() const;
+	int					getSockFd() const;
 };
-
-
-
-
 
 #endif

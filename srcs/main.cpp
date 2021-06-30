@@ -1,31 +1,41 @@
 #include "irc.hpp"
 
 int main (int ac, char **av){
-
-	(void)ac;
-	if (ac != 2){
-		std::cout << "need a number as arg\n";
-		return -1;
-	}
-
 	Base b;
 
-	init(av, b);
+	if (!init(ac, av, b))
+		return (FAIL);
 
-
-	int sockfd = b.getSockFd();
-
-	// ---	accept a connexion --
-    struct sockaddr_in addrClient;
-    // sockaddr_in addrClient;
-	int acc;
-	socklen_t len;
-	// addrClient = 0;
-	len = sizeof(addrClient);
-	acc = accept(sockfd, (struct sockaddr *)&addrClient, &len);
-	if (acc == -1){
-		std::cout << "\e[31mfailed to connect a new client\n\e[0m";
-	} else
-		std::cout << "\e[32mnew client !\n\e[0m";
-
+	for(;;) {
+		try {
+			connectingClient(b);
+		} catch (const MyException &e) {
+			std::cout << e.what();
+			break;
+		}
+		
+	}
 }
+
+
+
+
+
+/*		--- TO DO ---
+
+[ok]	Communication between client and server must be done via TCP/IP(v4) or (v6)
+[]	Format exec : ./ircserv [host:port_network:password_network] <port> <password>
+[]	handling multi client
+[]	Error handling
+[]	nc (Use ctrl+d to send parts of the command)
+[]	work with an IRC client ---  weechat
+[]	authenticate
+[]	set a nickname
+[]	username
+[]	join a channel
+[]	send and receive private messages
+[]	all messages from one client on a channel are sent to all other clients of the channel.
+[]	You must have operators and regular users.
+[]	Some operator’s specific actions/commands.
+
+*/

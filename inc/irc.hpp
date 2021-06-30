@@ -13,9 +13,15 @@
 #include "base.hpp"
 #include "exception.hpp"
 
-// class Base;
-void init(char **av, Base &b);
+//	define
 
-void	printForTest(void);
+#define SUCCESS 0
+#define	FAIL 1
+
+//	proto functions
+bool init(int ac, char **av, Base &b);
+void connectingClient(Base const &b);
+
+
 
 #endif
