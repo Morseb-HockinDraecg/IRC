@@ -1,10 +1,19 @@
 INC_DIR := inc/
 SRC_DIR	:= srcs/
+CLASS_DIR := class/
+COM_DIR := com/
 OBJ_DIR	:= obj/
 
 OBJ_DIRS = $(OBJ_DIR)
 
-PRE_SRCS =	main init connexion class/Base
+
+CLASS_SRCS = Base Client AMessage Server Messages Channel
+
+COM_SRCS = com
+
+PRE_SRCS =	main init connexion \
+			$(addprefix $(CLASS_DIR), $(CLASS_SRCS)) \
+			$(addprefix $(COM_DIR), $(COM_SRCS))
 
 SRCS = $(addsuffix .cpp, $(addprefix $(SRC_DIR), $(PRE_SRCS)))
 OBJS = $(addsuffix .o, $(addprefix $(OBJ_DIR), $(PRE_SRCS)))
@@ -15,7 +24,7 @@ NAME := ircPower
 
 CC := clang++
 CFLAGS := -Wall -Wextra -Werror -std=c++98
-INC	:= -I./$(INC_DIR)
+INC	:= -I./$(INC_DIR) -I./$(INC_DIR)Messages/
 RM = rm -f
 
 all:	$(NAME)

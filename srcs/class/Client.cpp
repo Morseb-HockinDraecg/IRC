@@ -1,4 +1,4 @@
-#include "client.hpp"
+#include "Client.hpp"
 
 //	---	---	---	Construcor - Destructor --- --- ---
 Client::Client() {}

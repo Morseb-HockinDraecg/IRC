@@ -10,8 +10,12 @@
 #include <sys/socket.h>	//sockets
 
 // class
-#include "base.hpp"
+#include "Base.hpp"
 #include "exception.hpp"
+#include "Client.hpp"
+#include "Server.hpp"
+// class msg
+#include "Password.hpp"
 
 //	define
 

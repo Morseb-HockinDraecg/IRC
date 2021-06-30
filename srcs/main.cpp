@@ -1,8 +1,22 @@
 #include "irc.hpp"
 
+static void 	test(){
+	AMessage *t = new Password();
+	Password	p;
+
+	t->command();
+	p.command();
+}
+
+
+
+
 int main (int ac, char **av){
 	Base b;
 
+
+test();
+return 1;
 	if (!init(ac, av, b))
 		return (FAIL);
 
