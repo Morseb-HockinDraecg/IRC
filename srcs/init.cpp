@@ -22,7 +22,7 @@ bool init(int ac, char **av, Socket &b){
 	return true;
 }
 
-//
+//	
 //	--- --- statics functions --- ---
 //
 

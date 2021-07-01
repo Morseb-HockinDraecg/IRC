@@ -7,6 +7,9 @@
 #define	FAIL 1
 #define	ERROR -1
 
+#define FALSE 0
+#define TRUE 1
+
 // includes
 
 #include <unistd.h> // write
@@ -37,9 +40,7 @@ Client *connectingClient(Socket const &b);
 int	msg(int fd);
 
 
-void closeFd_RearrangePoll(int &nfds, pollfd fds[200], int i);
-void	clearPoll(int nfds, pollfd fds[200]);
-
+void pollLoop(Socket &b, Client *c);
 
 
 #endif

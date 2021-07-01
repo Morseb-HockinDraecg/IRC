@@ -1,8 +1,14 @@
 #include "Client.hpp"
 
 //	---	---	---	Construcor - Destructor --- --- ---
-Client::Client() {}
-Client::~Client() {close(clientSocket);}
+Client::Client(){}
+Client::~Client(){
+	close(clientSocket);
+}
+Client::Client(int clientsocket, sockaddr_in addrclient, socklen_t addrclientsize)
+: clientSocket(clientsocket), addrClient(addrclient), addrClientSize(addrclientsize){
+}
+
 Client::Client (Client const &rhs){
 	*this = rhs;
 }

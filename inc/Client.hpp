@@ -17,6 +17,7 @@ class Client{
 
 public:
 	Client();
+	Client(int clientSocket, sockaddr_in addrClient, socklen_t addrClientSize);
 	~Client();
 	Client (Client const &);
 	Client & operator=(Client const &);
