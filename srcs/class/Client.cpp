@@ -2,7 +2,7 @@
 
 //	---	---	---	Construcor - Destructor --- --- ---
 Client::Client() {}
-Client::~Client() {}
+Client::~Client() {close(clientSocket);}
 Client::Client (Client const &rhs){
 	*this = rhs;
 }
@@ -18,6 +18,9 @@ Client & Client::operator=(Client const &rhs){
 }
 //	---	---	---	Setters --- --- ---
 
+void	Client::setClientSocket(int v){
+	clientSocket = v;
+}
 void	Client::setId(int v){
 	id = v;
 }
@@ -27,9 +30,18 @@ void	Client::setNickname(std::string v){
 void	Client::setUsername(std::string v){
 	username = v;
 }
+void	Client::setAddrClient(sockaddr_in v){
+	addrClient = v;
+}
+void	Client::setAddrClientSize(socklen_t v){
+	addrClientSize = v;
+}
 
 // --- --- --- Getters --- --- ---
 
+int				Client::getClientSocket() const{
+	return clientSocket;
+}
 int				Client::getId() const{
 	return id;
 }
@@ -39,4 +51,9 @@ std::string		Client::getNickname() const{
 std::string		Client::getUsername() const{
 	return username;
 }
-
+sockaddr_in		Client::getAddrClient() const{
+	return addrClient;
+}
+socklen_t		Client::getAddrClientSize() const{
+	return addrClientSize;
+}

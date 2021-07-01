@@ -1,5 +1,5 @@
-#ifndef BASE_HPP
-#define BASE_HPP
+#ifndef Socket_HPP
+#define Socket_HPP
 
 #include <iostream>
 #include <string>
@@ -8,16 +8,16 @@
 #include <sys/types.h>	//sockets
 #include <sys/socket.h>	//sockets
 
-class Base{
+class Socket{
 
 	struct sockaddr_in	addr;
 	int					sockFd;
 
 public:
-	Base();
-	~Base();
-	Base (Base const &);
-	Base & operator=(Base const &);
+	Socket();
+	~Socket();
+	Socket (Socket const &);
+	Socket & operator=(Socket const &);
 
 	void	setAddr(struct sockaddr_in v);
 	void	setSockFd(int v);

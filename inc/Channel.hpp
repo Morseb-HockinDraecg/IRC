@@ -9,7 +9,7 @@ class Channel{
 	std::string				name;
 	std::string				password;
 	unsigned int			currentUsers;
-	const unsigned int	maxNbUsers;
+	const unsigned int		maxNbUsers;
 
 	Channel(); // need a name at least
 public:

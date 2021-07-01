@@ -1,19 +1,24 @@
 #include "irc.hpp"
 
-void connectingClient(Base const &b){	// ---	accept a connexion --
+Client *connectingClient(Socket const &b){	// ---	accept a connexion --
+	Client	*cl = new Client;
 	int sockfd = b.getSockFd();
 
-    struct sockaddr_in addrClient;
-    // sockaddr_in addrClient;
+    sockaddr_in addrClient;
+	socklen_t addrClientSize;
 	int acc;
-	socklen_t len;
-	len = sizeof(addrClient);
-	acc = accept(sockfd, (struct sockaddr *)&addrClient, &len);
-	if (acc == -1){
-		std::cout << "\e[31mfailed to connect a new client\n\e[0m";
+	addrClientSize = sizeof(addrClient);
+	acc = accept(sockfd, (struct sockaddr *)&addrClient, &addrClientSize);
+	if (acc == ERROR){
+		if (errno != EWOULDBLOCK)
+			perror("  accept() failed");
+		std::cerr << "\e[31mfailed to connect a new client\n\e[0m";
 		throw MyException();
 	} else {
 		std::cout << "\e[36mnew client !\n\e[0m";
-
 	}
+	cl->setClientSocket(acc);
+	cl->setAddrClient(addrClient);
+	cl->setAddrClientSize(addrClientSize);
+	return cl;
 }

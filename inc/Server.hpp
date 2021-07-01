@@ -6,21 +6,18 @@
 
 #include<list>
 
+#include "Client.hpp"
+
 class	AMessage;
-class	Channel;
-
-//	Name COMMAND parameter_list
-/*
-           1. Pass message
-           2. Nick message
-           3. User message
-*/
-
+class	Client;
+// class	Channel;
 
 class Server{
 
 	AMessage			*coReg;
-	std::list<Channel>	chan;
+	// struct pollfd		fds[200];
+	std::list<Client *>	clients;
+	// std::list<Channel>	chan;
 
 public:
 	Server();
@@ -28,7 +25,12 @@ public:
 	Server (Server const &);
 	Server & operator=(Server const &);
 
+	void	addClient(Client *);
+	void	delClient(std::string username);
 
+	std::list<Client *>	getClients() const;
 };
+
+std::ostream & operator<<(std::ostream &, Server const &);
 
 #endif
