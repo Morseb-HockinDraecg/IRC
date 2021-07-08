@@ -3,7 +3,7 @@
 
 // 4. Message details
 
-int msg(int fd)
+int msg(int fd, Server &s)
 {
 	unsigned long dsize = 0;
 	int rc;
@@ -19,8 +19,14 @@ int msg(int fd)
 		perror("\e[31mconnection issue\e[0m ");
 		return FAIL;
 	}
-	std::cout << "Received: " << std::string(buffer, dsize); //Display msg
-	send(fd, buffer, dsize, 0);
+	std::cout << "Received from fd " << fd << ": " << std::string(buffer, dsize); //Display msg
+
+	std::cout << s.nfds << " nfds\n";
+	for (int i = 1; i < s.nfds; i++){
+		if (s.fds[i].fd == fd)
+			continue ;
+		send(s.fds[i].fd, buffer, dsize, 0);
+	}
 	free(buffer);
 	return SUCCESS;
 }
