@@ -1,8 +1,17 @@
 #include "Server.hpp"
 
 //	---	---	---	Construcor - Destructor --- --- ---
-Server::Server() {}
-Server::~Server() {}
+Server::Server(Socket &s) : sock(s), nfds(1) {
+	memset(fds, 0, sizeof(fds));
+	fds[0].fd = s.getSockFd();
+	fds[0].events = POLLIN;
+}
+Server::~Server() {
+	for (int i = 0; i < nfds; i++){
+		if (fds[i].fd >= 0)
+			close(fds[i].fd);
+	}
+}
 
 //	---	---	---	Operators --- --- ---
 
@@ -48,4 +57,8 @@ void	Server::delClient(std::string username){
 std::list<Client *>	Server::getClients() const{
 	return clients;
 }
+Socket const &		Server::getSocket() const{
+	return sock;
+}
+
 

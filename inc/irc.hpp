@@ -12,7 +12,9 @@
 
 // includes
 
-#include <unistd.h> // write
+#include <unistd.h> //	write
+#include <stdlib.h>	//	exit
+#include <cerrno>	//	errno
 
 #include <cstdio>		// perror
 #include <netinet/in.h> // struct sockaddr_in
@@ -40,7 +42,7 @@ Client *connectingClient(Socket const &b);
 int	msg(int fd);
 
 
-void pollLoop(Socket &b, Client *c);
+void pollLoop(Socket &b);
 
 
 #endif

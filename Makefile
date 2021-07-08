@@ -28,14 +28,14 @@ INC	:= -I./$(INC_DIR) -I./$(INC_DIR)Messages/
 RM = rm -f
 
 all:	$(NAME)
-
-$(NAME): $(OBJ_DIRS) $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) 
-	echo "----- \033[32m $@ created\033[0m  -----"
 	echo "----- \033[33m | -- --- TO USE --- -- |\033[0m  -----"
 	echo "----- \033[33m | ./ircserv  \033[34m 6667\033[33m     |\033[0m  -----"
 	echo "----- \033[33m | nc 127.0.0.1 \033[34m 6667\033[33m   | \033[0m  -----"
 	echo "----- \033[33m | -- --- --- --- --- --|\033[0m  -----"
+
+$(NAME): $(OBJ_DIRS) $(OBJS)
+	$(CC) $(CFLAGS) $(OBJS) -o $(NAME) 
+	echo "----- \033[32m $@ created\033[0m  -----"
 
 
 $(OBJ_DIRS):

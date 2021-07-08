@@ -4,13 +4,12 @@
 int main(int ac, char **av)
 {
 	Socket b;
-	Client *c = NULL;
-	Server s;
+	// Server s;
 
 	if (!init(ac, av, b))
 		return (FAIL);
 
-	pollLoop(b, c);
+	pollLoop(b);
 	// try {
 	// 	c = connectingClient(b);
 	// } catch (const MyException &e) {
@@ -37,7 +36,7 @@ int main(int ac, char **av)
 []	Format exec : ./ircserv [host:port_network:password_network] <port> <password>
 []	handling multi client
 []	Error handling
-[]	nc (Use ctrl+d to send parts of the command)
+[ok]	nc (Use ctrl+d to send parts of the command)
 []	work with an IRC client ---  weechat
 []	authenticate
 []	set a nickname
