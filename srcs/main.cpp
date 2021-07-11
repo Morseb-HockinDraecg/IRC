@@ -1,6 +1,6 @@
 #include "irc.hpp"
 
-//SAV 08.07.2021 : 15h
+//Avant reprise
 
 int main(int ac, char **av)
 {
@@ -35,7 +35,7 @@ int main(int ac, char **av)
 
 [ok]	Communication between client and server must be done via TCP/IP(v4) or (v6)
 []	Format exec : ./ircserv [host:port_network:password_network] <port> <password>
-[]	handling multi client
+[ok]	handling multi client
 []	Error handling
 [ok]	nc (Use ctrl+d to send parts of the command)
 []	work with an IRC client ---  weechat

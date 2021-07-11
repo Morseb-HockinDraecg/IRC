@@ -63,9 +63,9 @@ static void	addClient(Server &s){
 			new_sd = c->getClientSocket();
 			if (new_sd < 0)
 				continue;
+			std::cout << "  New incoming connection - " << new_sd << std::endl;
 			s.addClient(c);
 			std::cout << "\e[36mnew client !\n\e[0m";
-			std::cout << "  New incoming connection - " << new_sd << std::endl;
 			s.fds[s.nfds].fd = new_sd;
 			s.fds[s.nfds].events = POLLIN;
 			s.nfds++;

@@ -5,8 +5,7 @@
 #include <string>
 #include <string.h>
 #include <sys/poll.h>
-
-
+#include <map>
 #include<list>
 
 #include "Client.hpp"
@@ -21,10 +20,16 @@ class Server{
 
 	Socket const 		&sock;
 	AMessage			*coReg;
-	std::list<Client *>	clients;
+	// std::list<Client *>	clients;
+	std::map<int, Client*>	clientList;
 	// std::list<Channel>	chan;
+	// std::map<Channel, std::list<Client*> > channelList;
 
 public:
+
+void	add(Client *c);
+
+
 	int					nfds;
 	struct pollfd		fds[200];
 	Server(Socket &b);
@@ -34,8 +39,9 @@ public:
 
 	void	addClient(Client *);
 	void	delClient(std::string username);
+	void	displayClients() const;
 
-	std::list<Client *>	getClients() const;
+	// std::list<Client *>	getClients() const;
 	Socket const &		getSocket() const;
 };
 

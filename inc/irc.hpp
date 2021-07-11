@@ -31,6 +31,7 @@
 #include "Socket.hpp"
 #include "exception.hpp"
 #include "Server.hpp"
+#include "Channel.hpp"
 // class msg
 #include "Password.hpp"
 

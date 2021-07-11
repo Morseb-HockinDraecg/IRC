@@ -1,7 +1,7 @@
 #include "Client.hpp"
 
 //	---	---	---	Construcor - Destructor --- --- ---
-Client::Client(){}
+Client::Client() : userRight(0){}
 Client::~Client(){
 	close(clientSocket);
 }
@@ -42,6 +42,9 @@ void	Client::setAddrClient(sockaddr_in v){
 void	Client::setAddrClientSize(socklen_t v){
 	addrClientSize = v;
 }
+void	Client::setUserRight(bool v){
+	userRight = v;
+}
 
 // --- --- --- Getters --- --- ---
 
@@ -62,4 +65,7 @@ sockaddr_in		Client::getAddrClient() const{
 }
 socklen_t		Client::getAddrClientSize() const{
 	return addrClientSize;
+}
+bool			Client::getUserRight() const{
+	return userRight;
 }
