@@ -18,10 +18,10 @@ int main(int ac, char **av)
 [ok]	nc (Use ctrl+d to send parts of the command)
 []	work with an IRC client ---  weechat
 []	authenticate
-[]	set a nickname
-[]	username
-[]	join a channel
+[ok]	set a nickname
+[ok]	username
 []	send and receive private messages
+[]	join a channel
 []	all messages from one client on a channel are sent to all other clients of the channel.
 []	You must have operators and regular users.
 []	Some operator’s specific actions/commands.
