@@ -1,27 +1,14 @@
 #include "irc.hpp"
 
-// static void	addClient(Client *c, Socket const &b, Server &s, pollfd fds[200], int nfds);
 static void	addClient(Server &s);
 static void closeFd_RearrangePoll(Server &s, int i); // close fd client left + re sort the fd list
-// static void clearPoll(int nfds, pollfd fds[200]); // close all fd of poll before quit
 
-
-
-void pollLoop(Socket &b)
+void pollLoop(Socket &b, std::string pw)
 {
-	// (void)c;
-	// int new_sd = -1;
 	int rc;
 	int end_server = FALSE;
 	int current_size = 0, i;
-	// int nfds = 1, current_size = 0, i;
-	// struct pollfd fds[200];
-	Server s(b);
-
-	// memset(fds, 0, sizeof(fds));
-	// fds[0].fd = b.getSockFd();
-	// fds[0].events = POLLIN;
-
+	Server s(b, pw);
 
 	while (end_server == FALSE){
 		rc = poll(s.fds, s.nfds, -1);
@@ -34,7 +21,6 @@ void pollLoop(Socket &b)
 			if (s.fds[i].revents == 0)
 				continue;
 			if (s.fds[i].fd == b.getSockFd()){
-				// addClient(b, s, s.fds, s.nfds);
 				addClient(s);
 			}else{
 				if (s.fds[i].revents & POLLHUP || s.fds[i].revents & POLLERR || s.fds[i].revents & POLLNVAL){
@@ -46,7 +32,6 @@ void pollLoop(Socket &b)
 			}
 		}
 	}
-	// clearPoll(nfds, fds);
 }
 
 //	
@@ -64,7 +49,7 @@ static void	addClient(Server &s){
 			if (new_sd < 0)
 				continue;
 			std::cout << "  New incoming connection - " << new_sd << std::endl;
-			s.addClient(c);
+			s.addClient(new_sd, c);
 			std::cout << "\e[36mnew client !\n\e[0m";
 			s.fds[s.nfds].fd = new_sd;
 			s.fds[s.nfds].events = POLLIN;
@@ -92,11 +77,3 @@ static void closeFd_RearrangePoll(Server &s, int i)
 		}
 	}
 }
-
-// static void clearPoll(int nfds, pollfd fds[200])
-// {
-// 	for (int i = 0; i < nfds; i++){
-// 		if (fds[i].fd >= 0)
-// 			close(fds[i].fd);
-// 	}
-// }

@@ -1,7 +1,12 @@
 #include "Server.hpp"
 
 //	---	---	---	Construcor - Destructor --- --- ---
-Server::Server(Socket &s) : sock(s), nfds(1) {
+Server::Server(Socket &s, std::string pwd) : sock(s), password(pwd), nfds(1) {
+	d.name = "server";
+	d.version = "0.042";
+	d.dateCreat = "13/07/2021";
+	d.userMode = "none";
+	d.chanMode = "none";
 	memset(fds, 0, sizeof(fds));
 	fds[0].fd = s.getSockFd();
 	fds[0].events = POLLIN;
@@ -28,14 +33,8 @@ std::ostream & operator<<(std::ostream & o, Server const &rhs){
 
 
 //	---	---	---	Functions --- --- ---
-void	Server::addClient(Client * c){
-	int size = clientList.size();
-	for (int i = 0; i < size + 1 ; i++){
-		if (clientList.count(i) == 0){
-			clientList.insert(std::pair<int, Client*>(i, c));
-			break;
-		}
-	}
+void	Server::addClient(int fd, Client * c){
+	clientList.insert(std::pair<int, Client*>(fd, c));
 }
 void	Server::delClient(std::string username){
 	std::map<int, Client*>::iterator it;
@@ -56,11 +55,19 @@ void	Server::displayClients() const{
 //	---	---	---	Setters --- --- ---
 
 // --- --- --- Getters --- --- ---
-// std::list<Client *>	Server::getClients() const{
-// 	return clients;
-// }
+t_data		Server::getData() const{
+	return d;
+}
+Client *	Server::getClients(int fd) const{
+	std::map<int, Client*>::const_iterator it;
+	for (it = clientList.begin(); it != clientList.end(); ++it)
+		if (it->first == fd)
+			return it->second;
+	return NULL;
+}
 Socket const &		Server::getSocket() const{
 	return sock;
 }
-
-
+std::string const &		Server::getPwd() const{
+	return password;
+}

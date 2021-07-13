@@ -1,0 +1,8 @@
+#ifndef DEFINEERRORREPLIES_HPP
+#define DEFINEERRORREPLIES_HPP
+
+#define	ERR_NONICKNAMEGIVEN 431 //":No nickname given"
+
+
+
+#endif

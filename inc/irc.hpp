@@ -12,6 +12,7 @@
 
 // includes
 
+#include <defineErrorReplies.hpp>
 #include <unistd.h> //	write
 #include <stdlib.h>	//	exit
 #include <cerrno>	//	errno
@@ -32,9 +33,6 @@
 #include "exception.hpp"
 #include "Server.hpp"
 #include "Channel.hpp"
-// class msg
-#include "Password.hpp"
-
 
 
 //	proto functions
@@ -43,7 +41,10 @@ Client *connectingClient(Socket const &b);
 int	msg(int fd, Server &s);
 
 
-void pollLoop(Socket &b);
+void pollLoop(Socket &b, std::string pwd);
+
+void	welcomeMsg(int fd, Server &s, Client &c);
+
 
 
 #endif

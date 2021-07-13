@@ -1,33 +1,12 @@
 #include "irc.hpp"
 
-//Avant reprise
-
 int main(int ac, char **av)
 {
 	Socket b;
-	// Server s;
 
 	if (!init(ac, av, b))
 		return (FAIL);
-
-	pollLoop(b);
-	// try {
-	// 	c = connectingClient(b);
-	// } catch (const MyException &e) {
-	// 	std::cout << e.what();
-	// 	break;
-	// }
-
-	// s.addClient(c);
-	// std::cout << "clients list : "<<  c << std::endl;
-	// char	host[NI_MAXHOST];
-	// char	serv[NI_MAXSERV];
-
-	// memset(host, 0, NI_MAXHOST);
-	// memset(serv, 0, NI_MAXSERV);
-	// msg();
-
-	// }
+	pollLoop(b, av[2]);
 	close(b.getSockFd());
 }
 

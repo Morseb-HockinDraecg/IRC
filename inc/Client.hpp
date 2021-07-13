@@ -11,9 +11,11 @@ class Client{
 	int			clientSocket;	//ret of accept
     sockaddr_in	addrClient;		//needed for accept
 	socklen_t	addrClientSize;	//neede for accept
-	// int			id;
+
+	bool		sRegister;		// NICK USER cmd needed for the server
 	std::string	nickname;
 	std::string	username;
+	std::string	host;
 	bool		userRight;		//0 classic user - 1 operator user
 
 public:
@@ -26,7 +28,7 @@ public:
 	void	setClientSocket(int v);
 	void	setAddrClient(sockaddr_in v);
 	void	setAddrClientSize(socklen_t v);
-	void	setId(int v);
+	void	setRegister(bool v);
 	void	setNickname(std::string v);
 	void	setUsername(std::string v);
 	void	setUserRight(bool v);
@@ -35,9 +37,11 @@ public:
 	int				getClientSocket() const;
 	sockaddr_in		getAddrClient() const;
 	socklen_t		getAddrClientSize() const;
-	int				getId() const;
+
+	bool			getRegister() const;
 	std::string		getNickname() const;
 	std::string		getUsername() const;
+	std::string		getHost() const;
 	bool			getUserRight() const;
 };
 
