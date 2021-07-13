@@ -25,6 +25,7 @@ void pollLoop(Socket &b, std::string pw)
 			}else{
 				if (s.fds[i].revents & POLLHUP || s.fds[i].revents & POLLERR || s.fds[i].revents & POLLNVAL){
 					std::cout << "\e[33mThe client was disconnected\n\e[0m";
+					delete s.getClients(i);
 					closeFd_RearrangePoll(s, i);
 				}else if (s.fds[i].revents & POLLIN){
 					msg(s.fds[i].fd, s);

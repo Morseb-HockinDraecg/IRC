@@ -2,7 +2,7 @@
 
 //	---	---	---	Construcor - Destructor --- --- ---
 Server::Server(Socket &s, std::string pwd) : sock(s), password(pwd), nfds(1) {
-	d.name = "server";
+	d.name = "IRCserver";
 	d.version = "0.042";
 	d.dateCreat = "13/07/2021";
 	d.userMode = "none";

@@ -33,7 +33,6 @@ public:
 	void	setUsername(std::string v);
 	void	setUserRight(bool v);
 
-
 	int				getClientSocket() const;
 	sockaddr_in		getAddrClient() const;
 	socklen_t		getAddrClientSize() const;

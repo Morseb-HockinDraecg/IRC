@@ -15,34 +15,11 @@ void	user(Server &s, int fd, std::string user){
 	cl = s.getClients(fd);
 	if (cl){
 		if (cl->getNickname().empty()){
-			int number_to_send = ERR_NONICKNAMEGIVEN; // Put your value
-			int converted_number = htonl(number_to_send);
-
-			// write(fd, &converted_number, sizeof(converted_number));
-			send(fd, &converted_number, sizeof(converted_number), 0);
+			send(fd, ERR_NONICKNAMEGIVEN, sizeof(ERR_NONICKNAMEGIVEN), 0);
 			return;
 		}
 		cl->setUsername(user.substr(0, user.find("\n")));
 		if (!cl->getRegister()){
-			// //retMsg
-			// std::string	ret = ": ";
-			// // ret.append(s.getName());
-			// ret.append("001    RPL_WELCOME Welcome to the Internet Relay Network ");
-			// ret.append(cl->getNickname());
-			// ret.append("!");
-			// ret.append(cl->getUsername());
-			// ret.append("@");
-			// // ret.append(s.getSocket().getAddr().sin_addr.s_addr);
-			// ret.append("127.0.0.1\r\n");
-
-			// char *str;
-			// str = &ret[0];
-			// std::cout << "---" << std::endl;
-			// std::cout << str << std::endl;
-			// std::cout << "---" << std::endl;
-			// std::cout << "client :" << cl->getNickname() << ", "<< cl->getUsername() << std::endl;
-			// std::cout << "---" << std::endl;
-			// send(fd, str, strlen(str), 0);
 			welcomeMsg(fd, s, *cl);
 			cl->setRegister(true);
 		}
