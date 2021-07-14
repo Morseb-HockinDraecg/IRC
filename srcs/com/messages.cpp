@@ -70,8 +70,6 @@ void	privmsg(Server &s, int fd, std::string targetAndText){
 		msg += s.getClients(fd)->getID();
 		msg += " PRIVMSG ";
 		msg += nick;
-		// msg += " MSG(";
-		// msg += nick;
 		msg += " :";
 		msg += textToSend;
 		msg += "\n";
