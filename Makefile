@@ -7,9 +7,9 @@ OBJ_DIR	:= obj/
 OBJ_DIRS = $(OBJ_DIR)
 
 
-CLASS_SRCS = Socket Client AMessage Server 
+CLASS_SRCS = Socket Client Server 
 
-COM_SRCS = com poll welcome
+COM_SRCS = com messages poll welcome 
 
 PRE_SRCS =	main init connexion \
 			$(addprefix $(CLASS_DIR), $(CLASS_SRCS)) \
@@ -30,7 +30,7 @@ RM = rm -f
 all:	$(NAME)
 	echo "----- \033[33m| --- --- --- --- TO USE --- --- --- --- |\033[0m -----"
 	echo "----- \033[33m| ./ircserv  \033[34m   6667     <set password>\033[33m  |\033[0m -----"
-	echo "----- \033[33m| nc 127.0.0.1 \033[34m 6667       <password>\033[33m    |\033[0m -----"
+	echo "----- \033[33m| nc 127.0.0.1 \033[34m 6667                 \033[33m    |\033[0m -----"
 	echo "----- \033[33m| --- --- --- --- ------ --- --- --- --- |\033[0m -----"
 
 $(NAME): $(OBJ_DIRS) $(OBJS)

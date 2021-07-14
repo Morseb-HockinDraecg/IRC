@@ -1,12 +1,12 @@
 #include "Client.hpp"
 
 //	---	---	---	Construcor - Destructor --- --- ---
-Client::Client() : sRegister(false), host ("127.0.0.1"), userRight(false){}
+Client::Client() : pass(0), sRegister(false), host ("127.0.0.1"),userRight(false){}
 Client::~Client(){
 	close(clientSocket);
 }
 Client::Client(int clientsocket, sockaddr_in addrclient, socklen_t addrclientsize)
-: clientSocket(clientsocket), addrClient(addrclient), addrClientSize(addrclientsize){
+: clientSocket(clientsocket), addrClient(addrclient), addrClientSize(addrclientsize), pass(0), sRegister(false), host ("127.0.0.1"),userRight(false){
 }
 Client::Client (Client const &rhs){
 	*this = rhs;
@@ -24,20 +24,24 @@ Client & Client::operator=(Client const &rhs){
 void	Client::setClientSocket(int v){
 	clientSocket = v;
 }
-void	Client::setNickname(std::string v){
-	nickname = v;
-}
-void	Client::setUsername(std::string v){
-	username = v;
-}
 void	Client::setAddrClient(sockaddr_in v){
 	addrClient = v;
 }
 void	Client::setAddrClientSize(socklen_t v){
 	addrClientSize = v;
 }
+
+void	Client::setPass(bool v){
+	pass = v;
+}
 void	Client::setRegister(bool v){
 	sRegister = v;
+}
+void	Client::setNickname(std::string v){
+	nickname = v;
+}
+void	Client::setUsername(std::string v){
+	username = v;
 }
 void	Client::setUserRight(bool v){
 	userRight = v;
@@ -55,6 +59,9 @@ socklen_t		Client::getAddrClientSize() const{
 	return addrClientSize;
 }
 
+bool			Client::getPass() const{
+	return pass;
+}
 bool			Client::getRegister() const{
 	return sRegister;
 }
@@ -66,6 +73,16 @@ std::string		Client::getUsername() const{
 }
 std::string		Client::getHost() const{
 	return host;
+}
+std::string		Client::getID() const{
+	std::string id;
+	
+	id = nickname;
+	id += "!";
+	id += username;
+	id += "@";
+	id += host;
+	return id;
 }
 bool			Client::getUserRight() const{
 	return userRight;

@@ -1,51 +1,9 @@
 #include "irc.hpp"
 #include <sys/ioctl.h>
 
-void	nick(Server &s, int fd, std::string nick){
-	Client *cl;
 
-	cl = s.getClients(fd);
-	if (cl)
-		cl->setNickname(nick.substr(0, nick.find("\n")));
-}
-
-void	user(Server &s, int fd, std::string user){
-	Client *cl;
-
-	cl = s.getClients(fd);
-	if (cl){
-		if (cl->getNickname().empty()){
-			send(fd, ERR_NONICKNAMEGIVEN, sizeof(ERR_NONICKNAMEGIVEN), 0);
-			return;
-		}
-		cl->setUsername(user.substr(0, user.find("\n")));
-		if (!cl->getRegister()){
-			welcomeMsg(fd, s, *cl);
-			cl->setRegister(true);
-		}
-	}
-}
-
-void	pong(int fd){
-	send(fd, "PONG 127.0.0.1", strlen("PONG 127.0.0.1"), 0);
-	std::cout << "*-*" << std::endl;
-	std::cout << "PONG" << std::endl;
-	std::cout << "*-*" << std::endl;
-}
-
-void	manageCmd(std::string input, Server &s, int fd){
-	std::string firstWord;
-
-	firstWord = input.substr(0, input.find("\n"));
-	firstWord = input.substr(0, input.find("\r"));
-	firstWord = input.substr(0, input.find(" "));
-	if (firstWord == "NICK")
-		nick(s, fd, input.substr(5, 200));
-	else if (firstWord == "USER")
-		user(s, fd, input.substr(5, 200));
-	else if (firstWord == "PING")
-		pong(fd);
-}
+static void	init_arr_funct(void (*arr[8])(Server &s, int fd, std::string str)); // init array for messages
+static void	manageMsg(std::string input, Server &s, int fd);
 
 int msg(int fd, Server &s)
 {
@@ -66,7 +24,7 @@ int msg(int fd, Server &s)
 	}
 	std::string input = std::string(buffer, dsize);
 	std::cout << "Received from fd " << fd << ": " << input; //Display msg
-	manageCmd(input, s, fd);
+	manageMsg(input, s, fd);
 	// for (int i = 1; i < s.nfds; i++){
 	// 	if (s.fds[i].fd == fd)
 	// 		continue ;
@@ -74,4 +32,39 @@ int msg(int fd, Server &s)
 	// }
 	free(buffer);
 	return SUCCESS;
+}
+
+
+//	
+//	--- --- statics functions --- ---
+//
+
+static void	manageMsg(std::string input, Server &s, int fd){
+	void		(*arr[8])(Server &s, int fd, std::string str);
+	std::string	firstWord;
+	const int	msgsNb = 4;
+	int			msg;
+	std::string msgs[msgsNb] = {"PASS", "NICK", "USER", "PRIVMSG"};
+
+	input = input.substr(0, input.find("\n")).substr(0, input.find("\r"));
+	firstWord = input.substr(0, input.find(" "));
+	init_arr_funct(arr);
+	for(msg = 0; msg < msgsNb; msg++){
+		if (msgs[msg] == firstWord)
+			break ;
+	}
+	if (input.length() < msgs[msg].length() + 2 && msg < msgsNb){
+		send(fd, ERR_NEEDMOREPARAMS, sizeof(ERR_NEEDMOREPARAMS), 0);
+		return ;
+	}
+	if (msg != msgsNb)
+		arr[msg](s, fd, input.substr(msgs[msg].length() + 1, 200));
+}
+
+static void	init_arr_funct(void (*arr[8])(Server &s, int fd, std::string str)){
+	arr[E_PASS] = pass;
+	arr[E_NICK] = nick;
+	arr[E_USER] = user;
+	arr[E_PRIVMSG] = privmsg;
+	
 }

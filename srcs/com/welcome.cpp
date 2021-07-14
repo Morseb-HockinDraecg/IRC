@@ -9,12 +9,8 @@ void	welcomeMsg(int fd, Server &s, Client &c){
 	send(fd, "001    RPL_WELCOME ", strlen("001    RPL_WELCOME "), 0);
 	send(fd, c.getNickname().c_str(), c.getNickname().length(), 0);
 	send(fd, " ", 1, 0);
-	send(fd, ":Welcome to the Internet Relay Network", strlen(":Welcome to the Internet Relay Network"), 0);
-	send(fd, c.getNickname().c_str(), c.getNickname().length(), 0);
-	send(fd, "!", 1, 0);
-	send(fd, c.getUsername().c_str(), c.getUsername().length(), 0);
-	send(fd, "@", 1, 0);
-	send(fd, c.getHost().c_str(), c.getHost().length(), 0);
+	send(fd, ":Welcome to the Internet Relay Network ", strlen(":Welcome to the Internet Relay Network "), 0);
+	send(fd, c.getID().c_str(), c.getID().length(), 0);
 	send(fd, "\r\n",strlen("\r\n") , 0);
 
 	// 002    RPL_YOURHOST

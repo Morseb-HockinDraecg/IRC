@@ -65,6 +65,13 @@ Client *	Server::getClients(int fd) const{
 			return it->second;
 	return NULL;
 }
+Client *	Server::getClients(std::string user) const{
+	std::map<int, Client*>::const_iterator it;
+	for (it = clientList.begin(); it != clientList.end(); ++it)
+		if (it->second->getNickname() == user)
+			return it->second;
+	return NULL;
+}
 Socket const &		Server::getSocket() const{
 	return sock;
 }

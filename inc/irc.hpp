@@ -12,11 +12,12 @@
 
 // includes
 
-#include <defineErrorReplies.hpp>
+#include "defineErrorReplies.hpp"
+#include "messages.hpp"
+
 #include <unistd.h> //	write
 #include <stdlib.h>	//	exit
 #include <cerrno>	//	errno
-
 #include <cstdio>		// perror
 #include <netinet/in.h> // struct sockaddr_in
 #include <sys/types.h>	// sockets
@@ -25,7 +26,6 @@
 #include <string.h>		// memset
 #include <sys/poll.h>	// epoll not available on our machine - pref poll than select
 #include <fcntl.h>		// fcntl
-
 #include <sys/types.h>	//revc
 
 // class
@@ -33,6 +33,8 @@
 #include "exception.hpp"
 #include "Server.hpp"
 #include "Channel.hpp"
+
+#include <vector>
 
 
 //	proto functions

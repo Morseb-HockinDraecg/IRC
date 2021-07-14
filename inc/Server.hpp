@@ -11,7 +11,6 @@
 #include "Client.hpp"
 #include "Socket.hpp"
 
-class	AMessage;
 class	Client;
 class	Socket;
 // class	Channel;
@@ -28,7 +27,6 @@ class Server{
 
 	t_data				d;
 	Socket const 		&sock;
-	AMessage			*coReg;
 	std::string			password;
 	std::map<int, Client*>	clientList;
 	// std::list<Channel>	chan;
@@ -49,6 +47,7 @@ public:
 
 	t_data				getData() const;
 	Client	*			getClients(int fd) const;
+	Client	*			getClients(std::string user) const;
 	Socket const &		getSocket() const;
 	std::string const &	getPwd() const;
 };
