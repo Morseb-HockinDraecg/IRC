@@ -21,6 +21,12 @@ Server::~Server() {
 		delete it->second;
 		clientList.erase(it);
 	}
+	while (!this->channelList.empty()){
+		std::map<Channel *, std::list<Client*>* >::iterator it = channelList.begin();
+		delete it->first;
+		delete it->second;
+		channelList.erase(it);
+	}
 }
 
 //	---	---	---	Operators --- --- ---
@@ -33,6 +39,24 @@ std::ostream & operator<<(std::ostream & o, Server const &rhs){
 
 
 //	---	---	---	Functions --- --- ---
+void		Server::addChannel(Channel * chan){
+	std::list<Client *> *lst = new std::list<Client *>;
+	channelList.insert(std::pair<Channel *, std::list<Client*>* >(chan, lst));
+}
+void	Server::addChannelUser(std::string chan, Client *c){
+	std::map<Channel *, std::list<Client*>* >::iterator it;
+	for (it = channelList.begin(); it != channelList.end(); ++it){
+		if (it->first->getName() == chan)
+			it->second->push_front(c);
+	}
+}
+void	Server::listChannel(int fd){
+	std::map<Channel *, std::list<Client*>* >::iterator it;
+	for (it = channelList.begin(); it != channelList.end(); ++it){
+		send(fd, it->first->getName().c_str(), it->first->getName().length(), 0);
+		send(fd, "\n", 1, 0);
+	}
+}
 void	Server::addClient(int fd, Client * c){
 	clientList.insert(std::pair<int, Client*>(fd, c));
 }
@@ -52,9 +76,23 @@ void	Server::displayClients() const{
 	for (it = clientList.begin(); it != clientList.end(); ++it)
 		std::cout << it->first << "=>" << it->second << std::endl;
 }
+
 //	---	---	---	Setters --- --- ---
 
+
 // --- --- --- Getters --- --- ---
+
+std::list<Client *>*	Server::getNames(std::string chanName){
+	std::map<Channel *, std::list<Client*>* >::iterator it;
+
+	for (it = channelList.begin(); it != channelList.end(); ++it){
+		if (it->first->getName() == chanName)
+			return it->second;
+	}
+	return NULL;
+}
+
+
 t_data		Server::getData() const{
 	return d;
 }

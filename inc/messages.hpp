@@ -8,6 +8,9 @@ enum e_messages{
 	E_PASS,
 	E_NICK,
 	E_USER,
+	E_JOIN,
+	E_NAMES,
+	E_LIST,
 	E_PRIVMSG,
 };
 
@@ -21,14 +24,14 @@ void	user(Server &s, int fd, std::string user);
 	// Server Quit message
 
 // Channel operations
-	//Join message
+void	join(Server &s, int fd, std::string channel);
 	//Part message
 	//Mode message
 	//   Channel modes
 	//   User modes
 	// Topic messag
-	// Names message
-	// List message
+void	names(Server &s, int fd, std::string channel);
+void	list(Server &s, int fd, std::string channel);
 	// Invite message
 	// Kick message
 

@@ -9,11 +9,12 @@
 #include<list>
 
 #include "Client.hpp"
+#include "Channel.hpp"
 #include "Socket.hpp"
 
 class	Client;
 class	Socket;
-// class	Channel;
+class	Channel;
 
 typedef	struct s_data{
 	std::string	name;
@@ -25,12 +26,11 @@ typedef	struct s_data{
 
 class Server{
 
-	t_data				d;
-	Socket const 		&sock;
-	std::string			password;
-	std::map<int, Client*>	clientList;
-	// std::list<Channel>	chan;
-	// std::map<Channel, std::list<Client*> > channelList;
+	t_data										d;
+	Socket const 								&sock;
+	std::string									password;
+	std::map<int, Client*>						clientList;
+	std::map<Channel *, std::list<Client*>* >	channelList;
 
 public:
 
@@ -41,9 +41,15 @@ public:
 	Server (Server const &);
 	Server & operator=(Server const &);
 
+	void	addChannel(Channel * chan);
+	void	addChannelUser(std::string chan, Client *c);
+	void	listChannel(int fd);
 	void	addClient(int fd, Client *);
 	void	delClient(std::string username);
 	void	displayClients() const;
+
+
+	std::list<Client *> *getNames(std::string chanName);
 
 	t_data				getData() const;
 	Client	*			getClients(int fd) const;

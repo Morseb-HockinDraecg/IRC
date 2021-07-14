@@ -1,7 +1,7 @@
 #include "irc.hpp"
 #include <sys/ioctl.h>
 
-
+static int	checkRegister(int fd, int msg, Server &s);
 static void	init_arr_funct(void (*arr[8])(Server &s, int fd, std::string str)); // init array for messages
 static void	manageMsg(std::string input, Server &s, int fd);
 
@@ -42,9 +42,9 @@ int msg(int fd, Server &s)
 static void	manageMsg(std::string input, Server &s, int fd){
 	void		(*arr[8])(Server &s, int fd, std::string str);
 	std::string	firstWord;
-	const int	msgsNb = 4;
+	const int	msgsNb = 7;
 	int			msg;
-	std::string msgs[msgsNb] = {"PASS", "NICK", "USER", "PRIVMSG"};
+	std::string msgs[msgsNb] = {"PASS", "NICK", "USER", "JOIN", "NAMES", "LIST", "PRIVMSG"};
 
 	input = input.substr(0, input.find("\n")).substr(0, input.find("\r"));
 	firstWord = input.substr(0, input.find(" "));
@@ -53,18 +53,27 @@ static void	manageMsg(std::string input, Server &s, int fd){
 		if (msgs[msg] == firstWord)
 			break ;
 	}
-	if (input.length() < msgs[msg].length() + 2 && msg < msgsNb){
-		send(fd, ERR_NEEDMOREPARAMS, sizeof(ERR_NEEDMOREPARAMS), 0);
-		return ;
-	}
-	if (msg != msgsNb)
-		arr[msg](s, fd, input.substr(msgs[msg].length() + 1, 200));
+	if ( checkRegister(fd, msg, s) && msg != msgsNb)
+		arr[msg](s, fd, input.substr(msgs[msg].length(), 201));
 }
 
 static void	init_arr_funct(void (*arr[8])(Server &s, int fd, std::string str)){
 	arr[E_PASS] = pass;
 	arr[E_NICK] = nick;
 	arr[E_USER] = user;
+	arr[E_JOIN] = join;
+	arr[E_NAMES] = names;
+	arr[E_LIST] = list;
 	arr[E_PRIVMSG] = privmsg;
 	
+}
+
+static int	checkRegister(int fd, int msg, Server &s){
+	if (msg == E_PASS || msg == E_NICK || msg == E_USER)
+		return 1;
+	if (!s.getClients(fd)->getRegister()){
+		send(fd, ERR_NOTREGISTERED, sizeof(ERR_NOTREGISTERED), 0);
+		return 0;
+	}
+	return 1;
 }

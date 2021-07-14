@@ -7,7 +7,7 @@ OBJ_DIR	:= obj/
 OBJ_DIRS = $(OBJ_DIR)
 
 
-CLASS_SRCS = Socket Client Server 
+CLASS_SRCS = Socket Client Server Channel
 
 COM_SRCS = com messages poll welcome 
 

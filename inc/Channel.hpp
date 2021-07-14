@@ -9,12 +9,10 @@ class Channel{
 	std::string				name;
 	std::string				password;
 	unsigned int			currentUsers;
-	const unsigned int		maxNbUsers;
 
 	Channel(); // need a name at least
 public:
 	Channel(std::string name);
-	Channel(std::string name, unsigned int maxNbUser);
 	~Channel();
 	Channel (Channel const &);
 	Channel & operator=(Channel const &);

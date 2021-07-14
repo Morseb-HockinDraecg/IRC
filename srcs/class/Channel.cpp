@@ -1,12 +1,10 @@
 #include "Channel.hpp"
 
 //	---	---	---	Construcor - Destructor --- --- ---
-Channel::Channel(std::string name) : name(name), password(""), currentUsers(0), maxNbUsers(10){
-}
-Channel::Channel(std::string name, unsigned int maxNbUser) : name(name), password(), currentUsers(), maxNbUsers(maxNbUsers){
+Channel::Channel(std::string name) : name(name), password(""), currentUsers(0){
 }
 Channel::~Channel() {}
-Channel::Channel (Channel const &rhs) : maxNbUsers(rhs.maxNbUsers){
+Channel::Channel (Channel const &rhs){
 	*this = rhs;
 }
 
