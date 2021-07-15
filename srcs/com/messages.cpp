@@ -159,6 +159,7 @@ void	kick(Server &s, int fd, std::string kick){
 		//eject a client (target) from the channel
 		//send <comment> to <client> 
 	//endif
+	(void)s; (void)fd; (void)kick;
 }
 
 
