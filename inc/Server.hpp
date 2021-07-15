@@ -43,6 +43,7 @@ public:
 
 	void	addChannel(Channel * chan);
 	void	addChannelUser(std::string chan, Client *c);
+	void	rmChannelUser(std::string chan, Client *c);
 	void	listChannel(int fd);
 	void	addClient(int fd, Client *);
 	void	delClient(std::string username);

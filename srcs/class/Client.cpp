@@ -43,8 +43,8 @@ void	Client::setNickname(std::string v){
 void	Client::setUsername(std::string v){
 	username = v;
 }
-void	Client::setChan(std::string v){
-	chan = v;
+void	Client::setActivChan(std::string v){
+	activChan = v;
 }
 void	Client::setUserRight(bool v){
 	userRight = v;
@@ -87,8 +87,8 @@ std::string		Client::getID() const{
 	id += host;
 	return id;
 }
-std::string		Client::getChan() const{
-	return chan;
+std::string		Client::getActivChan() const{
+	return activChan;
 }
 bool			Client::getUserRight() const{
 	return userRight;

@@ -12,7 +12,10 @@ enum e_messages{
 	E_NAMES,
 	E_LIST,
 	E_PRIVMSG,
+	E_PING,
 };
+
+void	ign(Server &s, int z, std::string n); // ignore cmd
 
 // Connection registration
 void	pass(Server &s, int fd, std::string pwd);

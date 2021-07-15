@@ -37,10 +37,10 @@ int msg(int fd, Server &s)
 static void	manageMsg(std::string input, Server &s, int fd){
 	void		(*arr[8])(Server &s, int fd, std::string str);
 	std::string	firstWord;
-	const int	msgsNb = 7;
+	const int	msgsNb = 8;
 	int			msg;
 	int			reg;
-	std::string msgs[msgsNb] = {"PASS", "NICK", "USER", "JOIN", "NAMES", "LIST", "PRIVMSG"};
+	std::string msgs[msgsNb] = {"PASS", "NICK", "USER", "JOIN", "NAMES", "LIST", "PRIVMSG", "PING"};
 
 	input = input.substr(0, input.find("\n")).substr(0, input.find("\r"));
 	firstWord = input.substr(0, input.find(" "));
@@ -52,10 +52,10 @@ static void	manageMsg(std::string input, Server &s, int fd){
 	reg = checkRegister(fd, msg, s);
 	if (reg && msg != msgsNb)
 		arr[msg](s, fd, input.substr(msgs[msg].length(), 201));
-	else if (s.getClients(fd)->getChan().empty() || !reg)
+	else if (s.getClients(fd)->getActivChan().empty() || !reg)
 		return;
 	else{
-		std::list<Client *> *cl = s.getNames(s.getClients(fd)->getChan());
+		std::list<Client *> *cl = s.getNames(s.getClients(fd)->getActivChan());
 		std::list<Client *>::iterator it;
 
 		for (it = cl->begin(); it != cl->end(); it++){
@@ -80,6 +80,7 @@ static void	init_arr_funct(void (*arr[8])(Server &s, int fd, std::string str)){
 	arr[E_NAMES] = names;
 	arr[E_LIST] = list;
 	arr[E_PRIVMSG] = privmsg;
+	arr[E_PING] = ign;
 	
 }
 

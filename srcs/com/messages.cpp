@@ -2,6 +2,9 @@
 
 static int	trimFirstSpace(int fd, std::string &s);
 
+// ignore cmd
+void	ign(Server &s, int z, std::string n) {(void)s; (void)z; (void)n;}
+
 // Connection registration
 
 void	pass(Server &s, int fd, std::string pwd){
@@ -57,6 +60,8 @@ void	user(Server &s, int fd, std::string user){
 void	join(Server &s, int fd, std::string channel){
 	if (trimFirstSpace(fd, channel))
 		return;
+	if (!s.getClients(fd)->getActivChan().empty())
+		s.rmChannelUser(channel, s.getClients(fd));
 	s.addChannel(new Channel(channel));
 	s.addChannelUser(channel, s.getClients(fd));
 	channel += " :topic\n";
@@ -85,6 +90,7 @@ void	names(Server &s, int fd, std::string channel){
 		send(fd, (*it)->getNickname().c_str(), (*it)->getNickname().length(), 0);
 		send(fd, "\n", 1, 0);
 	}
+
 	channel += ":End of NAMES list\n";
 	send(fd, "366    RPL_ENDOFNAMES ", strlen("366    RPL_ENDOFNAMES "), 0);
 	send(fd, channel.c_str(), channel.length(), 0);

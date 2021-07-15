@@ -52,8 +52,16 @@ void	Server::addChannelUser(std::string chan, Client *c){
 	std::map<Channel *, std::list<Client*>* >::iterator it;
 	for (it = channelList.begin(); it != channelList.end(); ++it){
 		if (it->first->getName() == chan)
-			it->second->push_front(c);
-			c->setChan(chan);
+			it->second->push_back(c);
+			c->setActivChan(chan);
+	}
+}
+void	Server::rmChannelUser(std::string chan, Client *c){
+	std::map<Channel *, std::list<Client*>* >::iterator it;
+	for (it = channelList.begin(); it != channelList.end(); ++it){
+		if (it->first->getName() == chan)
+			it->second->remove(c);
+			c->setActivChan("");
 	}
 }
 void	Server::listChannel(int fd){
