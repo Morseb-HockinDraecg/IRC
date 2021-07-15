@@ -6,7 +6,7 @@ Client::~Client(){
 	close(clientSocket);
 }
 Client::Client(int clientsocket, sockaddr_in addrclient, socklen_t addrclientsize)
-: clientSocket(clientsocket), addrClient(addrclient), addrClientSize(addrclientsize), pass(0), sRegister(false), host ("127.0.0.1"),userRight(false){
+: clientSocket(clientsocket), addrClient(addrclient), addrClientSize(addrclientsize), pass(0), sRegister(false), host ("127.0.0.1"){
 }
 Client::Client (Client const &rhs){
 	*this = rhs;
@@ -20,11 +20,22 @@ Client & Client::operator=(Client const &rhs){
 	return *this;
 }
 
-//	---	---	---	Fonctions --- --- ---
+//	---	---	---	Functions --- --- ---
 void	Client::promot(std::string chan){
+	std::list<std::string>::iterator it;
+	for (it = chanRights.begin(); it != chanRights.end(); it++){
+		if (*it == chan)
+			return ;
+	}
 	chanRights.push_back(chan);
 }
-
+void	Client::demot(std::string chan){
+	std::list<std::string>::iterator it;
+	for (it = chanRights.begin(); it != chanRights.end(); it++){
+		if (*it == chan)
+			chanRights.erase(it);
+	}
+}
 
 //	---	---	---	Setters --- --- ---
 

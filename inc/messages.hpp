@@ -12,6 +12,7 @@ enum e_messages{
 	E_NAMES,
 	E_LIST,
 	E_PRIVMSG,
+	E_NOTICE,
 	E_PING,
 	E_KICK,
 	E_PART,
@@ -51,9 +52,8 @@ void	kick(Server &s, int fd, std::string channelAndUser);
 	//Info messag
 
 //Sending messages
-	//Private messages
 void	privmsg(Server &s, int fd, std::string targetAndText);
-	//Notice messages
+void	notice(Server &s, int fd, std::string targetAndText);
 
 //User-based queries
 	//Who query

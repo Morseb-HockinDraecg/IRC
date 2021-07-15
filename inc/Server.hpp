@@ -48,7 +48,7 @@ public:
 	void	addClient(int fd, Client *);
 	void	delClient(std::string username);
 	void	displayClients() const;
-
+	bool	clientOnChan(std::string client, std::string chan);
 
 	std::list<Client *> *getNames(std::string chanName) const;
 	std::map<Channel *, std::list<Client*>* > getChanList() const;

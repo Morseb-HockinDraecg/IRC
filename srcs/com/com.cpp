@@ -1,6 +1,6 @@
 #include "irc.hpp"
 #include <sys/ioctl.h>
-#define NBCMD 10
+#define NBCMD 11
 
 static int	checkRegister(int fd, int msg, Server &s);
 static void	init_arr_funct(void (*arr[NBCMD])(Server &s, int fd, std::string str)); // init array for messages
@@ -37,7 +37,7 @@ static void	manageMsg(std::string input, Server &s, int fd){
 	const int	msgsNb = NBCMD;
 	int			msg;
 	int			reg;
-	std::string msgs[msgsNb] = {"PASS", "NICK", "USER", "JOIN", "NAMES", "LIST", "PRIVMSG", "PING", "KICK", "PART"};
+	std::string msgs[msgsNb] = {"PASS", "NICK", "USER", "JOIN", "NAMES", "LIST", "PRIVMSG", "NOTICE", "PING", "KICK", "PART"};
 
 	input = input.substr(0, input.find("\n")).substr(0, input.find("\r"));
 	firstWord = input.substr(0, input.find(" "));
@@ -64,6 +64,7 @@ static void	init_arr_funct(void (*arr[NBCMD])(Server &s, int fd, std::string str
 	arr[E_NAMES] = names;
 	arr[E_LIST] = list;
 	arr[E_PRIVMSG] = privmsg;
+	arr[E_NOTICE] = notice;
 	arr[E_PING] = ign;
 	arr[E_KICK] = kick;
 	arr[E_PART] = part;

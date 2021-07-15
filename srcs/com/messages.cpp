@@ -90,7 +90,6 @@ void	join(Server &s, int fd, std::string channel){
 	msg = " ";
 	msg += channel;
 	names(s, fd, msg);
-
 }
 
 void	part(Server &s, int fd, std::string channel){
@@ -168,10 +167,17 @@ void	privmsg(Server &s, int fd, std::string targetAndText){
 		textToSend = targetAndText.substr(target.length() + 1);
 	} catch(std::exception &e){
 		std::cout << e.what() << std::endl;
+		return ;
 	}
 	c = s.getClients(target);
 	cl = s.getNames(target);
 	if (c || cl){
+		if (cl && !c){
+			if (!s.clientOnChan(s.getClients(fd)->getUsername(), target)){
+				send(fd, ERR_CANNOTSENDTOCHAN, sizeof(ERR_CANNOTSENDTOCHAN), 0);
+				return ;
+			}
+		}
 		if (textToSend.empty()){
 			send(fd, ERR_NOTEXTTOSEND, sizeof(ERR_NOTEXTTOSEND), 0);
 			return ;
@@ -193,7 +199,50 @@ void	privmsg(Server &s, int fd, std::string targetAndText){
 		return ;		
 	}
 }
+void	notice(Server &s, int fd, std::string targetAndText){
+	std::string	target;
+	std::string	textToSend;
+	std::string	msg;
+	Client		*c;
+	std::list<Client *> *cl;
 
+
+	if (trimFirstSpace(fd, targetAndText))
+		return;
+	try{
+		target = targetAndText.substr(0, targetAndText.find(" "));
+		textToSend = targetAndText.substr(target.length() + 1);
+	} catch(std::exception &e){
+		std::cout << e.what() << std::endl;
+		return ;
+	}
+	c = s.getClients(target);
+	cl = s.getNames(target);
+	if (c || cl){
+		if (cl && !c){
+			if (!s.clientOnChan(s.getClients(fd)->getUsername(), target)){
+				return ;
+			}
+		}
+		if (textToSend.empty()){
+			return ;
+		}
+		std::string nick = s.getClients(fd)->getNickname();
+		msg = ":";
+		msg += s.getClients(fd)->getID();
+		msg += " PRIVMSG ";
+		msg += nick;
+		msg += " :";
+		msg += textToSend;
+		msg += "\n";
+		if (c)
+			send(c->getClientSocket(), msg.c_str(), msg.length(), 0);
+		else
+			sendMsgChan(msg, s, fd);
+	}else{
+		return ;		
+	}
+}
 void	kick(Server &s, int fd, std::string input){
 	if (trimFirstSpace(fd, input) && s.getClients(fd)->getChanRights().empty())
 		return;

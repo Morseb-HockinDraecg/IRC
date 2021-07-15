@@ -30,8 +30,9 @@ public:
 	Client (Client const &);
 	Client & operator=(Client const &);
 
-	//Fonctions
+	//Functions
 	void	promot(std::string chan);
+	void	demot(std::string chan);
 	
 	//setters
 	void	setClientSocket(int v);

@@ -42,6 +42,7 @@ std::ostream & operator<<(std::ostream & o, Server const &rhs){
 void	Server::addChannel(Channel * chan){
 	std::list<Client *> *lst = new std::list<Client *>;
 	std::map<Channel *, std::list<Client*>* >::iterator it;
+
 	for (it = channelList.begin(); it != channelList.end(); ++it){
 		if (it->first->getName() == chan->getName())
 			return ;
@@ -51,6 +52,8 @@ void	Server::addChannel(Channel * chan){
 void	Server::addChannelUser(std::string chan, Client *c){
 	std::map<Channel *, std::list<Client*>* >::iterator it;
 
+	if (channelList.begin()->second->empty())
+		c->promot(chan);
 	for (it = channelList.begin(); it != channelList.end(); ++it){
 		if (it->first->getName() == chan)
 			it->second->push_back(c);
@@ -58,9 +61,10 @@ void	Server::addChannelUser(std::string chan, Client *c){
 	c->setActivChan(chan);
 }
 void	Server::rmChannelUser(std::string chan, Client *c){
+	std::map<Channel *, std::list<Client*>* >::iterator it;
+
 	if (c == NULL)
 		return ;
-	std::map<Channel *, std::list<Client*>* >::iterator it;
 	for (it = channelList.begin(); it != channelList.end(); ++it){
 		if (it->first->getName() == chan)
 			it->second->remove(c);
@@ -69,6 +73,7 @@ void	Server::rmChannelUser(std::string chan, Client *c){
 }
 void	Server::listChannel(int fd){
 	std::map<Channel *, std::list<Client*>* >::iterator it;
+
 	for (it = channelList.begin(); it != channelList.end(); ++it){
 		send(fd, it->first->getName().c_str(), it->first->getName().length(), 0);
 		send(fd, "\n", 1, 0);
@@ -79,6 +84,7 @@ void	Server::addClient(int fd, Client * c){
 }
 void	Server::delClient(std::string username){
 	std::map<int, Client*>::iterator it;
+
 	std::cout << "Client List on the server:\n";
 	for (it = clientList.begin(); it != clientList.end(); ++it)
 		if (it->second->getUsername() == username){
@@ -89,10 +95,28 @@ void	Server::delClient(std::string username){
 }
 void	Server::displayClients() const{
 	std::map<int, Client*>::const_iterator it;
+
 	std::cout << "Client List on the server:\n";
 	for (it = clientList.begin(); it != clientList.end(); ++it)
 		std::cout << it->first << "=>" << it->second << std::endl;
 }
+bool	Server::clientOnChan(std::string client, std::string chan){
+	std::map<Channel *, std::list<Client*>* >::iterator itC;
+	std::list<Client *>::iterator itL;
+	
+	if (client.empty() || chan.empty())
+		return false;
+
+	for (itC = channelList.begin(); itC != channelList.end(); ++itC){
+		if (itC->first->getName() == chan){
+			for(itL = itC->second->begin();itL != itC->second->end();++itL)
+				if ((*itL)->getUsername() == client)
+					return true;
+		}
+	}
+	return false;
+}
+
 
 //	---	---	---	Setters --- --- ---
 
@@ -113,13 +137,13 @@ std::map<Channel *, std::list<Client*>* > Server::getChanList() const{
 	return channelList;
 }
 
-
 t_data		Server::getData() const{
 	return d;
 }
 
 Client *	Server::getClients(int fd) const{
 	std::map<int, Client*>::const_iterator it;
+
 	for (it = clientList.begin(); it != clientList.end(); ++it)
 		if (it->first == fd)
 			return it->second;
@@ -128,6 +152,7 @@ Client *	Server::getClients(int fd) const{
 
 Client *	Server::getClients(std::string nickname) const{
 	std::map<int, Client*>::const_iterator it;
+
 	for (it = clientList.begin(); it != clientList.end(); ++it)
 		if (it->second->getNickname() == nickname)
 			return it->second;
@@ -136,6 +161,7 @@ Client *	Server::getClients(std::string nickname) const{
 
 Client	*	Server::getClientsUser(std::string user) const{
 	std::map<int, Client*>::const_iterator it;
+
 	for (it = clientList.begin(); it != clientList.end(); ++it)
 		if (it->second->getUsername() == user)
 			return it->second;
