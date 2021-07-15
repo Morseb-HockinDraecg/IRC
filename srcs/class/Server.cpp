@@ -54,18 +54,18 @@ void	Server::addChannelUser(std::string chan, Client *c){
 	for (it = channelList.begin(); it != channelList.end(); ++it){
 		if (it->first->getName() == chan)
 			it->second->push_back(c);
-			c->setActivChan(chan);
 	}
+	c->setActivChan(chan);
 }
 void	Server::rmChannelUser(std::string chan, Client *c){
+	if (c == NULL)
+		return ;
 	std::map<Channel *, std::list<Client*>* >::iterator it;
 	for (it = channelList.begin(); it != channelList.end(); ++it){
 		if (it->first->getName() == chan)
-		{
 			it->second->remove(c);
-			c->setActivChan("");
-		}
 	}
+	c->setActivChan("");
 }
 void	Server::listChannel(int fd){
 	std::map<Channel *, std::list<Client*>* >::iterator it;

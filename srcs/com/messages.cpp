@@ -178,36 +178,31 @@ void	privmsg(Server &s, int fd, std::string targetAndText){
 void	kick(Server &s, int fd, std::string input){
 	if (trimFirstSpace(fd, input))
 		return;
-	// size_t i = 0;
-	// size_t pos = 0;
-	// std::string chan[3];
-	// while ((pos = input.find(" ")) != std::string::npos) {
-	// 	chan[i] = input.substr(0, pos);
-	// 	input.erase(0, pos + 1);
-	// 	std::cout << i << std::endl;
-	// 	i++;
-	// }
-	// chan[i] = input.substr(0, pos);
 
-	std::string chan;
-	std::string user;
-	std::string com;
+	size_t i  = 0;
+	size_t pos = 0;
+	std::string data[3];
+	while ((pos = input.find(" ")) != std::string::npos) {
+		data[i] = input.substr(0, pos);
+		input.erase(0, pos + 1);
+		i++;
+	}
+	data[i] = input.substr(0, pos);
 
-	chan = input.substr(0, input.find(" "));
-	user = input.substr(chan.length() + 1, input.find(" "));
-	com = input.substr(user.length() + chan.length() + 2);
-	
-	std::cout << chan << " | " << user << " | " << com << "\n"; 
-	s.rmChannelUser(chan, s.getClientsUser(user));
-
+	for (int i = 0; i < 3; i++) 
+		std::cout << "|" << data[i] << "|\n";
+	s.rmChannelUser(data[0], s.getClientsUser(data[1]));
+	(void)s;
 	(void)fd;
 }
+
 // void	pong(int fd){
 // 	send(fd, "PONG 127.0.0.1", strlen("PONG 127.0.0.1"), 0);
 // 	std::cout << "*-*" << std::endl;
 // 	std::cout << "PONG" << std::endl;
 // 	std::cout << "*-*" << std::endl;
 // }
+
 static int	trimFirstSpace(int fd, std::string &s){
 	try {
 		s = s.substr(1);
