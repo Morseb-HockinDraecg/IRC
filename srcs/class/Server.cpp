@@ -119,10 +119,10 @@ Client *	Server::getClients(int fd) const{
 			return it->second;
 	return NULL;
 }
-Client *	Server::getClients(std::string user) const{
+Client *	Server::getClients(std::string nickname) const{
 	std::map<int, Client*>::const_iterator it;
 	for (it = clientList.begin(); it != clientList.end(); ++it)
-		if (it->second->getNickname() == user)
+		if (it->second->getNickname() == nickname)
 			return it->second;
 	return NULL;
 }
