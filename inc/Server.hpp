@@ -50,7 +50,7 @@ public:
 	void	displayClients() const;
 
 
-	std::list<Client *> *getNames(std::string chanName);
+	std::list<Client *> *getNames(std::string chanName) const;
 
 	t_data				getData() const;
 	Client	*			getClients(int fd) const;

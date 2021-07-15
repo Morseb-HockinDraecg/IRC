@@ -9,12 +9,12 @@ enum e_messages{
 	E_NICK,
 	E_USER,
 	E_JOIN,
-	E_PART,
 	E_NAMES,
 	E_LIST,
 	E_PRIVMSG,
 	E_PING,
 	E_KICK,
+	E_PART,
 };
 
 void	ign(Server &s, int z, std::string n); // ignore cmd

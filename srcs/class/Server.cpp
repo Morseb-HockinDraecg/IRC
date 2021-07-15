@@ -37,8 +37,8 @@ std::ostream & operator<<(std::ostream & o, Server const &rhs){
 	return o;
 }
 
-
 //	---	---	---	Functions --- --- ---
+
 void		Server::addChannel(Channel * chan){
 	std::list<Client *> *lst = new std::list<Client *>;
 	std::map<Channel *, std::list<Client*>* >::iterator it;
@@ -50,6 +50,7 @@ void		Server::addChannel(Channel * chan){
 }
 void	Server::addChannelUser(std::string chan, Client *c){
 	std::map<Channel *, std::list<Client*>* >::iterator it;
+
 	for (it = channelList.begin(); it != channelList.end(); ++it){
 		if (it->first->getName() == chan)
 			it->second->push_back(c);
@@ -96,12 +97,13 @@ void	Server::displayClients() const{
 
 // --- --- --- Getters --- --- ---
 
-std::list<Client *>*	Server::getNames(std::string chanName){
-	std::map<Channel *, std::list<Client*>* >::iterator it;
+std::list<Client *>*	Server::getNames(std::string chanName)const {
+	std::map<Channel *, std::list<Client*>* >::const_iterator it;
 
 	for (it = channelList.begin(); it != channelList.end(); ++it){
-		if (it->first->getName() == chanName)
+		if (it->first->getName() == chanName){
 			return it->second;
+		}
 	}
 	return NULL;
 }

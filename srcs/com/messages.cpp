@@ -22,7 +22,6 @@ void	pass(Server &s, int fd, std::string pwd){
 	else
 		send(fd, ERR_PASSWDMISMATCH, sizeof(ERR_PASSWDMISMATCH), 0);
 }
-
 void	nick(Server &s, int fd, std::string nick){
 	Client *cl;
 
@@ -32,7 +31,6 @@ void	nick(Server &s, int fd, std::string nick){
 	if (cl)
 		cl->setNickname(nick.substr(0, nick.find("\n")));
 }
-
 void	user(Server &s, int fd, std::string user){
 	Client *cl;
 
@@ -49,30 +47,56 @@ void	user(Server &s, int fd, std::string user){
 			return;
 		}
 		cl->setUsername(user.substr(0, user.find("\n")));
+		welcomeMsg(fd, s, *cl);
 		if (!cl->getRegister()){
-			welcomeMsg(fd, s, *cl);
 			cl->setRegister(true);
 		}
 	}
 }
 
 // Channel operations
+
+static void	sendMsgChan(std::string const &input, Server &s, int fd){
+	std::list<Client *> *cl = s.getNames(s.getClients(fd)->getActivChan());
+	std::list<Client *>::iterator it;
+
+	if (!cl)
+		return ;
+	for (it = cl->begin(); it != cl->end(); it++){
+		if ((*it)->getClientSocket() == fd)
+			continue ;
+		send((*it)->getClientSocket(), input.c_str(), input.length(), 0);
+		send((*it)->getClientSocket(), "\n", 1, 0);
+	}
+}
+
 void	join(Server &s, int fd, std::string channel){
+	std::string	msg;
+
 	if (trimFirstSpace(fd, channel))
 		return;
-	if (!s.getClients(fd)->getActivChan().empty())
-		s.rmChannelUser(channel, s.getClients(fd));
 	s.addChannel(new Channel(channel));
 	s.addChannelUser(channel, s.getClients(fd));
-	channel += " :topic\n";
-	send(fd, "332    RPL_TOPIC ", strlen("332    RPL_TOPIC "), 0);
-	send(fd, channel.c_str(), channel.length(), 0);
-	send(fd, "\r\n", 2, 0);
+	msg = ":";
+	msg += s.getClients(fd)->getID();
+	msg += " JOIN ";
+	msg += channel;
+	msg += "\n";
+	sendMsgChan(msg, s, fd);
+	send(fd, msg.c_str(), msg.length(), 0);
+	msg = "331    RPL_NOTOPIC ";
+	msg += channel;
+	msg += " :No topic is set\r\n";
+	send(fd, msg.c_str(), msg.length(), 0);
+	msg = " ";
+	msg += channel;
+	names(s, fd, msg);
 
 }
 void	names(Server &s, int fd, std::string channel){
 	std::list<Client *> *names;
 	std::list<Client *>::iterator it;
+	std::string	msg;
 
 	if (trimFirstSpace(fd, channel))
 		return;
@@ -81,38 +105,27 @@ void	names(Server &s, int fd, std::string channel){
 		send(fd, ERR_NOSUCHSERVER, sizeof(ERR_NOSUCHSERVER), 0);
 		return;
 	}
-	send(fd, "353    RPL_NAMREPLY ", strlen("353    RPL_NAMREPLY "), 0);
-	send(fd, channel.c_str(), channel.length(), 0);
-	send(fd, "\r\n", 2, 0);
-
-
 	for (it = names->begin(); it != names->end(); it++){
-		send(fd, (*it)->getNickname().c_str(), (*it)->getNickname().length(), 0);
-		send(fd, "\n", 1, 0);
+		msg = ":";
+		msg += s.getClients(fd)->getID();
+		msg = "353    RPL_NAMREPLY (\"=\")";
+		msg += channel;
+		msg += " : ";
+		msg += (*it)->getNickname();
+		msg += "\r\n";
+		send(fd, msg.c_str(), msg.length(), 0);
 	}
-
-	channel += ":End of NAMES list\n";
-	send(fd, "366    RPL_ENDOFNAMES ", strlen("366    RPL_ENDOFNAMES "), 0);
-	send(fd, channel.c_str(), channel.length(), 0);
-	send(fd, "\r\n", 2, 0);
-
-
-    //    353    RPL_NAMREPLY
-    //           "( "=" / "*" / "@" ) <channel>
-    //            :[ "@" / "+" ] <nick> *( " " [ "@" / "+" ] <nick> )
-
-
-
-	(void)s;
-	(void)fd;
-	(void)channel;
+	msg = ":";
+	msg += s.getClients(fd)->getID();
+	msg = "366    RPL_ENDOFNAMES ";
+	msg += channel;
+	msg += " :End of /NAMES list\r\n";
+	send(fd, msg.c_str(), msg.length(), 0);
 }
-
 void	list(Server &s, int fd, std::string channel){
 	s.listChannel(fd);
 	(void)channel;
 }
-
 
 //Sending messages
 
@@ -121,6 +134,8 @@ void	privmsg(Server &s, int fd, std::string targetAndText){
 	std::string	textToSend;
 	std::string	msg;
 	Client		*c;
+	std::list<Client *> *cl;
+
 
 	if (trimFirstSpace(fd, targetAndText))
 		return;
@@ -131,7 +146,8 @@ void	privmsg(Server &s, int fd, std::string targetAndText){
 		std::cout << e.what() << std::endl;
 	}
 	c = s.getClients(target);
-	if (c){
+	cl = s.getNames(target);
+	if (c || cl){
 		if (textToSend.empty()){
 			send(fd, ERR_NOTEXTTOSEND, sizeof(ERR_NOTEXTTOSEND), 0);
 			return ;
@@ -144,13 +160,15 @@ void	privmsg(Server &s, int fd, std::string targetAndText){
 		msg += " :";
 		msg += textToSend;
 		msg += "\n";
-		send(c->getClientSocket(), msg.c_str(), msg.length(), 0);
+		if (c)
+			send(c->getClientSocket(), msg.c_str(), msg.length(), 0);
+		else
+			sendMsgChan(msg, s, fd);
 	}else{
 		send(fd, ERR_NORECIPIENT, sizeof(ERR_NORECIPIENT), 0);
 		return ;		
 	}
 }
-
 void	kick(Server &s, int fd, std::string kick){
 	//kick a <client> since a <channel> by a this->superuser
 	//format => KICK <channel> <client> [<comment>]
@@ -161,16 +179,12 @@ void	kick(Server &s, int fd, std::string kick){
 	//endif
 	(void)s; (void)fd; (void)kick;
 }
-
-
 // void	pong(int fd){
 // 	send(fd, "PONG 127.0.0.1", strlen("PONG 127.0.0.1"), 0);
 // 	std::cout << "*-*" << std::endl;
 // 	std::cout << "PONG" << std::endl;
 // 	std::cout << "*-*" << std::endl;
 // }
-
-
 static int	trimFirstSpace(int fd, std::string &s){
 	try {
 		s = s.substr(1);

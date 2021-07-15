@@ -23,7 +23,7 @@ NAME := ircserv
 
 
 CC := clang++
-CFLAGS := -Wall -Wextra -Werror -std=c++98 -g
+CFLAGS := -Wall -Wextra -Werror -std=c++98
 INC	:= -I./$(INC_DIR) -I./$(INC_DIR)Messages/
 RM = rm -f
 
