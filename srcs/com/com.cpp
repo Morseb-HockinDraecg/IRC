@@ -8,6 +8,7 @@ static void	manageMsg(std::string input, Server &s, int fd);
 
 int msg(int fd, Server &s){
 	unsigned long dsize = 0;
+	std::string input;
 	int rc;
 
 	rc =ioctl(fd, FIONREAD, &dsize);
@@ -20,10 +21,10 @@ int msg(int fd, Server &s){
 		perror("\e[31mconnection issue\e[0m ");
 		return FAIL;
 	}
-	std::string input = std::string(buffer, dsize);
+	input += std::string(buffer, dsize);
+	free(buffer);
 	std::cout << "Received from fd " << fd << ": " << input; //Display msg
 	manageMsg(input, s, fd);
-	free(buffer);
 	return SUCCESS;
 }
 

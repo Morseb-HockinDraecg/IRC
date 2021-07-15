@@ -38,15 +38,10 @@
 
 
 //	proto functions
-bool init(int ac, char **av, Socket &b);
+bool	init(int ac, char **av, Socket &b);
 Client *connectingClient(Socket const &b);
-
-int	msg(int fd, Server &s);
-
-void pollLoop(Socket &b, std::string pwd);
-
+void	pollLoop(Socket &b, std::string pwd);
 void	welcomeMsg(int fd, Server &s, Client &c);
-
-
+int		msg(int fd, Server &s);
 
 #endif
