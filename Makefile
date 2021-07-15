@@ -45,7 +45,7 @@ $(OBJ_DIRS):
 
 $(OBJS) : $(INC_DIR)
 
-$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
+$(OBJ_DIR)%.o: $(SRC_DIR)%.cpp $(wildcard $(INC_DIR)*.hpp)
 	$(CC) $(CFLAGS) $(INC) -c $< -o $@
 	echo "$@ \033[32mcreated\033[0m"
 

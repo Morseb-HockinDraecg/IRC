@@ -151,7 +151,15 @@ void	privmsg(Server &s, int fd, std::string targetAndText){
 	}
 }
 
+void	kick(Server &s, int fd, std::string kick){
+	//kick a <client> since a <channel> by a this->superuser
+	//format => KICK <channel> <client> [<comment>]
 
+	//if this->user is superuser
+		//eject a client (target) from the channel
+		//send <comment> to <client> 
+	//endif
+}
 
 
 // void	pong(int fd){

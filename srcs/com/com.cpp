@@ -35,12 +35,12 @@ int msg(int fd, Server &s)
 //
 
 static void	manageMsg(std::string input, Server &s, int fd){
-	void		(*arr[8])(Server &s, int fd, std::string str);
+	void		(*arr[9])(Server &s, int fd, std::string str);
 	std::string	firstWord;
-	const int	msgsNb = 8;
+	const int	msgsNb = 9;
 	int			msg;
 	int			reg;
-	std::string msgs[msgsNb] = {"PASS", "NICK", "USER", "JOIN", "NAMES", "LIST", "PRIVMSG", "PING"};
+	std::string msgs[msgsNb] = {"PASS", "NICK", "USER", "JOIN", "NAMES", "LIST", "PRIVMSG", "PING", "KICK"};
 
 	input = input.substr(0, input.find("\n")).substr(0, input.find("\r"));
 	firstWord = input.substr(0, input.find(" "));
@@ -81,7 +81,7 @@ static void	init_arr_funct(void (*arr[8])(Server &s, int fd, std::string str)){
 	arr[E_LIST] = list;
 	arr[E_PRIVMSG] = privmsg;
 	arr[E_PING] = ign;
-	
+	arr[E_KICK] = kick;
 }
 
 static int	checkRegister(int fd, int msg, Server &s){

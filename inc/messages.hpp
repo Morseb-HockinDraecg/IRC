@@ -9,10 +9,12 @@ enum e_messages{
 	E_NICK,
 	E_USER,
 	E_JOIN,
+	E_PART,
 	E_NAMES,
 	E_LIST,
 	E_PRIVMSG,
 	E_PING,
+	E_KICK,
 };
 
 void	ign(Server &s, int z, std::string n); // ignore cmd
@@ -36,7 +38,7 @@ void	join(Server &s, int fd, std::string channel);
 void	names(Server &s, int fd, std::string channel);
 void	list(Server &s, int fd, std::string channel);
 	// Invite message
-	// Kick message
+void	kick(Server &s, int fd, std::string kick);
 
 //Server queries and command
 	//Version message

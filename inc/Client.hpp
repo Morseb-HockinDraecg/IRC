@@ -5,6 +5,7 @@
 #include <string>
 #include <netinet/in.h> // struct sockaddr_in
 #include <unistd.h>		//close
+#include <list>
 
 class Client{
 
@@ -20,6 +21,8 @@ class Client{
 	std::string	idFormMsg;
 	std::string	activChan;
 	bool		userRight;		//0 classic user - 1 operator user
+	std::list<std::string> chanRights; //superuser chan lst
+
 
 public:
 	Client();
