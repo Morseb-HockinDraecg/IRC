@@ -176,7 +176,7 @@ void	privmsg(Server &s, int fd, std::string targetAndText){
 }
 
 void	kick(Server &s, int fd, std::string input){
-	if (trimFirstSpace(fd, input))
+	if (trimFirstSpace(fd, input) && s.getClients(fd)->getChanRights().empty())
 		return;
 
 	size_t i  = 0;
@@ -188,12 +188,11 @@ void	kick(Server &s, int fd, std::string input){
 		i++;
 	}
 	data[i] = input.substr(0, pos);
-
-	for (int i = 0; i < 3; i++) 
-		std::cout << "|" << data[i] << "|\n";
-	s.rmChannelUser(data[0], s.getClientsUser(data[1]));
-	(void)s;
-	(void)fd;
+	std::list<std::string>::iterator it;
+	for (it = s.getClients(fd)->getChanRights().begin(); it != s.getClients(fd)->getChanRights().end(); it++)
+		if (*it == data[0])
+			s.rmChannelUser(data[0], s.getClientsUser(data[1]));
+	sendMsgChan(data[2], s, s.getClientsUser(data[1])->getClientSocket());
 }
 
 // void	pong(int fd){

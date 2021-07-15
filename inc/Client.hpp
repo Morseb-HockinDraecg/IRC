@@ -20,7 +20,6 @@ class Client{
 	std::string	host;
 	std::string	idFormMsg;
 	std::string	activChan;
-	bool		userRight;		//0 classic user - 1 operator user
 	std::list<std::string> chanRights; //superuser chan lst
 
 
@@ -31,6 +30,9 @@ public:
 	Client (Client const &);
 	Client & operator=(Client const &);
 
+	//Fonctions
+	void	promot(std::string chan);
+	
 	//setters
 	void	setClientSocket(int v);
 	void	setAddrClient(sockaddr_in v);
@@ -41,7 +43,6 @@ public:
 	void	setNickname(std::string v);
 	void	setUsername(std::string v);
 	void	setActivChan(std::string v);
-	void	setUserRight(bool v);
 
 	// getters
 	int				getClientSocket() const;
@@ -55,7 +56,8 @@ public:
 	std::string		getHost() const;
 	std::string		getID() const;
 	std::string		getActivChan() const;
-	bool			getUserRight() const;
+	std::list<std::string> getChanRights() const;
+	
 };
 
 #endif
