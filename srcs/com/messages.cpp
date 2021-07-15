@@ -77,13 +77,12 @@ void	join(Server &s, int fd, std::string channel){
 		return;
 	s.addChannel(new Channel(channel));
 	s.addChannelUser(channel, s.getClients(fd));
-	msg = ":";
-	msg += s.getClients(fd)->getID();
-	msg += " JOIN ";
+	msg = ":local JOIN ";
 	msg += channel;
 	msg += "\n";
 	sendMsgChan(msg, s, fd);
 	send(fd, msg.c_str(), msg.length(), 0);
+	
 	msg = "331    RPL_NOTOPIC ";
 	msg += channel;
 	msg += " :No topic is set\r\n";
@@ -112,21 +111,20 @@ void	names(Server &s, int fd, std::string channel){
 		send(fd, ERR_NOSUCHSERVER, sizeof(ERR_NOSUCHSERVER), 0);
 		return;
 	}
-	for (it = names->begin(); it != names->end(); it++){
-		msg = ":";
-		msg += s.getClients(fd)->getID();
-		msg = "353    RPL_NAMREPLY (\"=\")";
-		msg += channel;
-		msg += " : ";
-		msg += (*it)->getNickname();
-		msg += "\r\n";
-		send(fd, msg.c_str(), msg.length(), 0);
-	}
-	msg = ":";
-	msg += s.getClients(fd)->getID();
-	msg = "366    RPL_ENDOFNAMES ";
+
+	msg = ":local 353    RPL_NAMREPLY (\"=\")";
 	msg += channel;
-	msg += " :End of /NAMES list\r\n";
+	msg += " :";
+	for (it = names->begin(); it != names->end(); it++){
+		msg += " ";
+		msg += (*it)->getNickname();
+	}
+	msg += "\r\n";
+	send(fd, msg.c_str(), msg.length(), 0);
+
+	msg = ":local 366    RPL_ENDOFNAMES ";
+	msg += channel;
+	msg += " :End of NAMES list\r\n";
 	send(fd, msg.c_str(), msg.length(), 0);
 }
 void	list(Server &s, int fd, std::string channel){

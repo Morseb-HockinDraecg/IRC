@@ -39,7 +39,7 @@ std::ostream & operator<<(std::ostream & o, Server const &rhs){
 
 //	---	---	---	Functions --- --- ---
 
-void		Server::addChannel(Channel * chan){
+void	Server::addChannel(Channel * chan){
 	std::list<Client *> *lst = new std::list<Client *>;
 	std::map<Channel *, std::list<Client*>* >::iterator it;
 	for (it = channelList.begin(); it != channelList.end(); ++it){
