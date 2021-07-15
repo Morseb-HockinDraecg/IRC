@@ -59,9 +59,11 @@ void	join(Server &s, int fd, std::string channel){
 		return;
 	s.addChannel(new Channel(channel));
 	s.addChannelUser(channel, s.getClients(fd));
-	channel += " :topic";
+	channel += " :topic\n";
 	send(fd, "332    RPL_TOPIC ", strlen("332    RPL_TOPIC "), 0);
 	send(fd, channel.c_str(), channel.length(), 0);
+	send(fd, "\r\n", 2, 0);
+
 }
 void	names(Server &s, int fd, std::string channel){
 	std::list<Client *> *names;
@@ -76,11 +78,18 @@ void	names(Server &s, int fd, std::string channel){
 	}
 	send(fd, "353    RPL_NAMREPLY ", strlen("353    RPL_NAMREPLY "), 0);
 	send(fd, channel.c_str(), channel.length(), 0);
-	for (it = names->begin(); it != names->end(); it++)
+	send(fd, "\r\n", 2, 0);
+
+
+	for (it = names->begin(); it != names->end(); it++){
 		send(fd, (*it)->getNickname().c_str(), (*it)->getNickname().length(), 0);
-	channel += ":End of NAMES list";
+		send(fd, "\n", 1, 0);
+	}
+	channel += ":End of NAMES list\n";
 	send(fd, "366    RPL_ENDOFNAMES ", strlen("366    RPL_ENDOFNAMES "), 0);
-	send(fd, channel.c_str(), channel.length(), 0);	
+	send(fd, channel.c_str(), channel.length(), 0);
+	send(fd, "\r\n", 2, 0);
+
 
     //    353    RPL_NAMREPLY
     //           "( "=" / "*" / "@" ) <channel>

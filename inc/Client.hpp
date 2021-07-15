@@ -18,6 +18,7 @@ class Client{
 	std::string	username;
 	std::string	host;
 	std::string	idFormMsg;
+	std::string	chan;
 	bool		userRight;		//0 classic user - 1 operator user
 
 public:
@@ -36,6 +37,7 @@ public:
 	void	setRegister(bool v);
 	void	setNickname(std::string v);
 	void	setUsername(std::string v);
+	void	setChan(std::string v);
 	void	setUserRight(bool v);
 
 	// getters
@@ -49,6 +51,7 @@ public:
 	std::string		getUsername() const;
 	std::string		getHost() const;
 	std::string		getID() const;
+	std::string		getChan() const;
 	bool			getUserRight() const;
 };
 

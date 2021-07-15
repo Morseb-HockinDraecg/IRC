@@ -25,11 +25,6 @@ int msg(int fd, Server &s)
 	std::string input = std::string(buffer, dsize);
 	std::cout << "Received from fd " << fd << ": " << input; //Display msg
 	manageMsg(input, s, fd);
-	// for (int i = 1; i < s.nfds; i++){
-	// 	if (s.fds[i].fd == fd)
-	// 		continue ;
-	// 	send(s.fds[i].fd, buffer, dsize, 0);
-	// }
 	free(buffer);
 	return SUCCESS;
 }
@@ -44,6 +39,7 @@ static void	manageMsg(std::string input, Server &s, int fd){
 	std::string	firstWord;
 	const int	msgsNb = 7;
 	int			msg;
+	int			reg;
 	std::string msgs[msgsNb] = {"PASS", "NICK", "USER", "JOIN", "NAMES", "LIST", "PRIVMSG"};
 
 	input = input.substr(0, input.find("\n")).substr(0, input.find("\r"));
@@ -53,8 +49,27 @@ static void	manageMsg(std::string input, Server &s, int fd){
 		if (msgs[msg] == firstWord)
 			break ;
 	}
-	if ( checkRegister(fd, msg, s) && msg != msgsNb)
+	reg = checkRegister(fd, msg, s);
+	if (reg && msg != msgsNb)
 		arr[msg](s, fd, input.substr(msgs[msg].length(), 201));
+	else if (s.getClients(fd)->getChan().empty() || !reg)
+		return;
+	else{
+		std::list<Client *> *cl = s.getNames(s.getClients(fd)->getChan());
+		std::list<Client *>::iterator it;
+
+		for (it = cl->begin(); it != cl->end(); it++){
+			if ((*it)->getClientSocket() == fd)
+				continue ;
+			send((*it)->getClientSocket(), input.c_str(), input.length(), 0);
+			send((*it)->getClientSocket(), "\n", 1, 0);
+		}
+		// for (int i = 1; i < s.nfds; i++){
+		// 	if (s.fds[i].fd == fd)
+		// 		continue ;
+		// 	send(s.fds[i].fd, input.c_str(), input.length(), 0);
+		// }
+	}
 }
 
 static void	init_arr_funct(void (*arr[8])(Server &s, int fd, std::string str)){

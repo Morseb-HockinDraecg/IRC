@@ -41,6 +41,11 @@ std::ostream & operator<<(std::ostream & o, Server const &rhs){
 //	---	---	---	Functions --- --- ---
 void		Server::addChannel(Channel * chan){
 	std::list<Client *> *lst = new std::list<Client *>;
+	std::map<Channel *, std::list<Client*>* >::iterator it;
+	for (it = channelList.begin(); it != channelList.end(); ++it){
+		if (it->first->getName() == chan->getName())
+			return ;
+	}
 	channelList.insert(std::pair<Channel *, std::list<Client*>* >(chan, lst));
 }
 void	Server::addChannelUser(std::string chan, Client *c){
@@ -48,6 +53,7 @@ void	Server::addChannelUser(std::string chan, Client *c){
 	for (it = channelList.begin(); it != channelList.end(); ++it){
 		if (it->first->getName() == chan)
 			it->second->push_front(c);
+			c->setChan(chan);
 	}
 }
 void	Server::listChannel(int fd){
