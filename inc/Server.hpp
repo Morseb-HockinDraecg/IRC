@@ -51,6 +51,7 @@ public:
 
 
 	std::list<Client *> *getNames(std::string chanName) const;
+	std::map<Channel *, std::list<Client*>* > getChanList() const;
 
 	t_data				getData() const;
 	Client	*			getClients(int fd) const;

@@ -109,6 +109,9 @@ std::list<Client *>*	Server::getNames(std::string chanName)const {
 	}
 	return NULL;
 }
+std::map<Channel *, std::list<Client*>* > Server::getChanList() const{
+	return channelList;
+}
 
 
 t_data		Server::getData() const{

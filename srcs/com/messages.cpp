@@ -111,24 +111,43 @@ void	names(Server &s, int fd, std::string channel){
 		send(fd, ERR_NOSUCHSERVER, sizeof(ERR_NOSUCHSERVER), 0);
 		return;
 	}
-
-	msg = ":local 353    RPL_NAMREPLY (\"=\")";
-	msg += channel;
-	msg += " :";
-	for (it = names->begin(); it != names->end(); it++){
-		msg += " ";
-		msg += (*it)->getNickname();
+	if ((*names).size()){
+		msg = ":local 353    RPL_NAMREPLY (\"=\")";
+		msg += channel;
+		msg += " :";
+		for (it = names->begin(); it != names->end(); it++){
+			msg += " ";
+			msg += (*it)->getNickname();
+		}
+		msg += "\r\n";
+		send(fd, msg.c_str(), msg.length(), 0);
 	}
-	msg += "\r\n";
-	send(fd, msg.c_str(), msg.length(), 0);
-
 	msg = ":local 366    RPL_ENDOFNAMES ";
 	msg += channel;
 	msg += " :End of NAMES list\r\n";
 	send(fd, msg.c_str(), msg.length(), 0);
 }
 void	list(Server &s, int fd, std::string channel){
-	s.listChannel(fd);
+	std::map<Channel *, std::list<Client*>* >	channelList;
+	std::map<Channel *, std::list<Client*>* >::iterator it;
+	std::string	msg;
+
+	channelList = s.getChanList();
+	if (!channelList.empty()){
+		msg = ":local 322    RPL_LIST";
+		msg += channel;
+		msg += " :";
+		for (it = channelList.begin(); it != channelList.end(); ++it){
+			msg += " ";
+			msg += it->first->getName();
+		}
+		msg += "\r\n";
+		send(fd, msg.c_str(), msg.length(), 0);
+	}
+
+	msg = ":local 323    RPL_LISTEND ";
+	msg += " :End of LIST\r\n";
+	send(fd, msg.c_str(), msg.length(), 0);
 	(void)channel;
 }
 
