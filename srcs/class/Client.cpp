@@ -1,7 +1,7 @@
 #include "Client.hpp"
 
 //	---	---	---	Construcor - Destructor --- --- ---
-Client::Client() : pass(0), sRegister(false), host ("127.0.0.1"),userRight(false){}
+Client::Client() : pass(0), sRegister(false), host ("127.0.0.1"){}
 Client::~Client(){
 	close(clientSocket);
 }
@@ -19,6 +19,13 @@ Client & Client::operator=(Client const &rhs){
 	username = rhs.getUsername();
 	return *this;
 }
+
+//	---	---	---	Fonctions --- --- ---
+void	Client::promot(std::string chan){
+	chanRights.push_back(chan);
+}
+
+
 //	---	---	---	Setters --- --- ---
 
 void	Client::setClientSocket(int v){
@@ -46,10 +53,6 @@ void	Client::setUsername(std::string v){
 void	Client::setActivChan(std::string v){
 	activChan = v;
 }
-void	Client::setUserRight(bool v){
-	userRight = v;
-}
-
 // --- --- --- Getters --- --- ---
 
 int				Client::getClientSocket() const{
@@ -90,6 +93,8 @@ std::string		Client::getID() const{
 std::string		Client::getActivChan() const{
 	return activChan;
 }
-bool			Client::getUserRight() const{
-	return userRight;
+
+std::list<std::string> Client::getChanRights() const
+{
+	return chanRights;
 }

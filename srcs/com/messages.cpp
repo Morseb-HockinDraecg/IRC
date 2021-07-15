@@ -195,38 +195,32 @@ void	privmsg(Server &s, int fd, std::string targetAndText){
 }
 
 void	kick(Server &s, int fd, std::string input){
-	if (trimFirstSpace(fd, input))
+	if (trimFirstSpace(fd, input) && s.getClients(fd)->getChanRights().empty())
 		return;
-	// size_t i = 0;
-	// size_t pos = 0;
-	// std::string chan[3];
-	// while ((pos = input.find(" ")) != std::string::npos) {
-	// 	chan[i] = input.substr(0, pos);
-	// 	input.erase(0, pos + 1);
-	// 	std::cout << i << std::endl;
-	// 	i++;
-	// }
-	// chan[i] = input.substr(0, pos);
 
-	std::string chan;
-	std::string user;
-	std::string com;
-
-	chan = input.substr(0, input.find(" "));
-	user = input.substr(chan.length() + 1, input.find(" "));
-	com = input.substr(user.length() + chan.length() + 2);
-	
-	std::cout << chan << " | " << user << " | " << com << "\n"; 
-	s.rmChannelUser(chan, s.getClientsUser(user));
-
-	(void)fd;
+	size_t i  = 0;
+	size_t pos = 0;
+	std::string data[3];
+	while ((pos = input.find(" ")) != std::string::npos) {
+		data[i] = input.substr(0, pos);
+		input.erase(0, pos + 1);
+		i++;
+	}
+	data[i] = input.substr(0, pos);
+	std::list<std::string>::iterator it;
+	for (it = s.getClients(fd)->getChanRights().begin(); it != s.getClients(fd)->getChanRights().end(); it++)
+		if (*it == data[0])
+			s.rmChannelUser(data[0], s.getClientsUser(data[1]));
+	sendMsgChan(data[2], s, s.getClientsUser(data[1])->getClientSocket());
 }
+
 // void	pong(int fd){
 // 	send(fd, "PONG 127.0.0.1", strlen("PONG 127.0.0.1"), 0);
 // 	std::cout << "*-*" << std::endl;
 // 	std::cout << "PONG" << std::endl;
 // 	std::cout << "*-*" << std::endl;
 // }
+
 static int	trimFirstSpace(int fd, std::string &s){
 	try {
 		s = s.substr(1);
