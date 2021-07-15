@@ -55,6 +55,7 @@ public:
 	t_data				getData() const;
 	Client	*			getClients(int fd) const;
 	Client	*			getClients(std::string nickname) const;
+	Client	*			getClientsUser(std::string user) const;
 	Socket const &		getSocket() const;
 	std::string const &	getPwd() const;
 };

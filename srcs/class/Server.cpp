@@ -61,8 +61,10 @@ void	Server::rmChannelUser(std::string chan, Client *c){
 	std::map<Channel *, std::list<Client*>* >::iterator it;
 	for (it = channelList.begin(); it != channelList.end(); ++it){
 		if (it->first->getName() == chan)
+		{
 			it->second->remove(c);
 			c->setActivChan("");
+		}
 	}
 }
 void	Server::listChannel(int fd){
@@ -112,6 +114,7 @@ std::list<Client *>*	Server::getNames(std::string chanName)const {
 t_data		Server::getData() const{
 	return d;
 }
+
 Client *	Server::getClients(int fd) const{
 	std::map<int, Client*>::const_iterator it;
 	for (it = clientList.begin(); it != clientList.end(); ++it)
@@ -119,6 +122,7 @@ Client *	Server::getClients(int fd) const{
 			return it->second;
 	return NULL;
 }
+
 Client *	Server::getClients(std::string nickname) const{
 	std::map<int, Client*>::const_iterator it;
 	for (it = clientList.begin(); it != clientList.end(); ++it)
@@ -126,6 +130,15 @@ Client *	Server::getClients(std::string nickname) const{
 			return it->second;
 	return NULL;
 }
+
+Client	*	Server::getClientsUser(std::string user) const{
+	std::map<int, Client*>::const_iterator it;
+	for (it = clientList.begin(); it != clientList.end(); ++it)
+		if (it->second->getUsername() == user)
+			return it->second;
+	return NULL;
+}
+
 Socket const &		Server::getSocket() const{
 	return sock;
 }

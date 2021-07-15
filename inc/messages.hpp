@@ -30,7 +30,7 @@ void	user(Server &s, int fd, std::string user);
 
 // Channel operations
 void	join(Server &s, int fd, std::string channel);
-	//Part message
+void	part(Server &s, int fd, std::string channel);
 	//Mode message
 	//   Channel modes
 	//   User modes
@@ -38,7 +38,7 @@ void	join(Server &s, int fd, std::string channel);
 void	names(Server &s, int fd, std::string channel);
 void	list(Server &s, int fd, std::string channel);
 	// Invite message
-void	kick(Server &s, int fd, std::string kick);
+void	kick(Server &s, int fd, std::string channelAndUser);
 
 //Server queries and command
 	//Version message

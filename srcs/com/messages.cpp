@@ -93,6 +93,13 @@ void	join(Server &s, int fd, std::string channel){
 	names(s, fd, msg);
 
 }
+
+void	part(Server &s, int fd, std::string channel){
+	if (trimFirstSpace(fd, channel))
+		return;
+	s.rmChannelUser(channel, s.getClients(fd));
+}
+
 void	names(Server &s, int fd, std::string channel){
 	std::list<Client *> *names;
 	std::list<Client *>::iterator it;
@@ -169,15 +176,33 @@ void	privmsg(Server &s, int fd, std::string targetAndText){
 		return ;		
 	}
 }
-void	kick(Server &s, int fd, std::string kick){
-	//kick a <client> since a <channel> by a this->superuser
-	//format => KICK <channel> <client> [<comment>]
 
-	//if this->user is superuser
-		//eject a client (target) from the channel
-		//send <comment> to <client> 
-	//endif
-	(void)s; (void)fd; (void)kick;
+void	kick(Server &s, int fd, std::string input){
+	if (trimFirstSpace(fd, input))
+		return;
+	// size_t i = 0;
+	// size_t pos = 0;
+	// std::string chan[3];
+	// while ((pos = input.find(" ")) != std::string::npos) {
+	// 	chan[i] = input.substr(0, pos);
+	// 	input.erase(0, pos + 1);
+	// 	std::cout << i << std::endl;
+	// 	i++;
+	// }
+	// chan[i] = input.substr(0, pos);
+
+	std::string chan;
+	std::string user;
+	std::string com;
+
+	chan = input.substr(0, input.find(" "));
+	user = input.substr(chan.length() + 1, input.find(" "));
+	com = input.substr(user.length() + chan.length() + 2);
+	
+	std::cout << chan << " | " << user << " | " << com << "\n"; 
+	s.rmChannelUser(chan, s.getClientsUser(user));
+
+	(void)fd;
 }
 // void	pong(int fd){
 // 	send(fd, "PONG 127.0.0.1", strlen("PONG 127.0.0.1"), 0);

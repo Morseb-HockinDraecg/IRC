@@ -1,8 +1,9 @@
 #include "irc.hpp"
 #include <sys/ioctl.h>
+#define NBCMD 10
 
 static int	checkRegister(int fd, int msg, Server &s);
-static void	init_arr_funct(void (*arr[10])(Server &s, int fd, std::string str)); // init array for messages
+static void	init_arr_funct(void (*arr[NBCMD])(Server &s, int fd, std::string str)); // init array for messages
 static void	manageMsg(std::string input, Server &s, int fd);
 
 int msg(int fd, Server &s){
@@ -31,9 +32,9 @@ int msg(int fd, Server &s){
 //
 
 static void	manageMsg(std::string input, Server &s, int fd){
-	void		(*arr[10])(Server &s, int fd, std::string str);
+	void		(*arr[NBCMD])(Server &s, int fd, std::string str);
 	std::string	firstWord;
-	const int	msgsNb = 10;
+	const int	msgsNb = NBCMD;
 	int			msg;
 	int			reg;
 	std::string msgs[msgsNb] = {"PASS", "NICK", "USER", "JOIN", "NAMES", "LIST", "PRIVMSG", "PING", "KICK", "PART"};
@@ -54,7 +55,8 @@ static void	manageMsg(std::string input, Server &s, int fd){
 	else
 		send(fd, ERR_UNKNOWNCOMMAND, sizeof(ERR_UNKNOWNCOMMAND), 0);
 }
-static void	init_arr_funct(void (*arr[10])(Server &s, int fd, std::string str)){
+
+static void	init_arr_funct(void (*arr[NBCMD])(Server &s, int fd, std::string str)){
 	arr[E_PASS] = pass;
 	arr[E_NICK] = nick;
 	arr[E_USER] = user;
@@ -64,7 +66,7 @@ static void	init_arr_funct(void (*arr[10])(Server &s, int fd, std::string str)){
 	arr[E_PRIVMSG] = privmsg;
 	arr[E_PING] = ign;
 	arr[E_KICK] = kick;
-	arr[E_PART] = ign;
+	arr[E_PART] = part;
 }
 static int	checkRegister(int fd, int msg, Server &s){
 	if (msg == E_PASS || msg == E_NICK || msg == E_USER)
