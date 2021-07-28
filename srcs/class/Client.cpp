@@ -23,6 +23,7 @@ Client & Client::operator=(Client const &rhs){
 //	---	---	---	Functions --- --- ---
 void	Client::promot(std::string chan){
 	std::list<std::string>::iterator it;
+
 	for (it = chanRights.begin(); it != chanRights.end(); it++){
 		if (*it == chan)
 			return ;
@@ -31,6 +32,7 @@ void	Client::promot(std::string chan){
 }
 void	Client::demot(std::string chan){
 	std::list<std::string>::iterator it;
+	
 	for (it = chanRights.begin(); it != chanRights.end(); it++){
 		if (*it == chan)
 			chanRights.erase(it);
@@ -60,9 +62,6 @@ void	Client::setNickname(std::string v){
 }
 void	Client::setUsername(std::string v){
 	username = v;
-}
-void	Client::setActivChan(std::string v){
-	activChan = v;
 }
 // --- --- --- Getters --- --- ---
 
@@ -101,11 +100,6 @@ std::string		Client::getID() const{
 	id += host;
 	return id;
 }
-std::string		Client::getActivChan() const{
-	return activChan;
-}
-
-std::list<std::string> Client::getChanRights() const
-{
+std::list<std::string> Client::getChanRights() const{
 	return chanRights;
 }

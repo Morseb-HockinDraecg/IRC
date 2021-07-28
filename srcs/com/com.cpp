@@ -50,7 +50,6 @@ static void	manageMsg(std::string input, Server &s, int fd){
 	reg = checkRegister(fd, msg, s);
 	if (reg && msg != msgsNb)
 		arr[msg](s, fd, input.substr(msgs[msg].length(), 201));
-	// else if (s.getClients(fd)->getActivChan().empty() || !reg)
 	else if (!reg)
 		return;
 	else

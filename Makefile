@@ -18,9 +18,7 @@ PRE_SRCS =	main init connexion \
 SRCS = $(addsuffix .cpp, $(addprefix $(SRC_DIR), $(PRE_SRCS)))
 OBJS = $(addsuffix .o, $(addprefix $(OBJ_DIR), $(PRE_SRCS)))
 
-
 NAME := ircserv
-
 
 CC := clang++
 CFLAGS := -Wall -Wextra -Werror -std=c++98

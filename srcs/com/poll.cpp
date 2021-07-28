@@ -3,8 +3,7 @@
 static void	addClient(Server &s);
 static void closeFd_RearrangePoll(Server &s, int i); // close fd client left + re sort the fd list
 
-void pollLoop(Socket &b, std::string pw)
-{
+void pollLoop(Socket &b, std::string pw){
 	int rc;
 	int end_server = FALSE;
 	int current_size = 0, i;
@@ -27,9 +26,8 @@ void pollLoop(Socket &b, std::string pw)
 					std::cout << "\e[33mThe client was disconnected\n\e[0m";
 					delete s.getClients(i);
 					closeFd_RearrangePoll(s, i);
-				}else if (s.fds[i].revents & POLLIN){
+				}else if (s.fds[i].revents & POLLIN)
 					msg(s.fds[i].fd, s);
-				}
 			}
 		}
 	}
@@ -62,8 +60,7 @@ static void	addClient(Server &s){
 	}while (new_sd != ERROR);
 }
 
-static void closeFd_RearrangePoll(Server &s, int i)
-{
+static void closeFd_RearrangePoll(Server &s, int i){
 	int j;
 
 	close(s.fds[i].fd);
